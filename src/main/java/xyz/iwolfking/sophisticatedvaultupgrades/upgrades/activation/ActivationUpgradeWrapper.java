@@ -45,22 +45,9 @@ public class ActivationUpgradeWrapper extends UpgradeWrapperBase<ActivationUpgra
         BlockState blockState = world.getBlockState(blockPos);
 
         if(blockState.getBlock() instanceof TreasureDoorBlock door) {
-            Set<ItemStackKey> itemsToRemove = new HashSet<>();
-            boolean isOpen = door.isOpen(blockState);
-            if(!isOpen) {
-                storageWrapper.getInventoryForUpgradeProcessing().getTrackedStacks().forEach(itemStackKey -> {
-                    if(itemStackKey.getStack().getItem() == blockState.getValue(TreasureDoorBlock.TYPE).getKey()) {
-                        itemsToRemove.add(itemStackKey);
-                        door.setOpen(player, world, blockState , blockPos, true);
-                        CommonEvents.TREASURE_ROOM_OPEN.invoke(world, player, blockPos);
-                    }
-                });
-                for(ItemStackKey key : itemsToRemove) {
-                    InventoryHelper.extractFromInventory(key.stack(), storageWrapper.getInventoryForUpgradeProcessing(), false);
-                }
-                return true;
-            }
+            return ActivationUpgradeLogic.tryOpenTreasureDoor(player, world, blockState, blockPos, door, storageWrapper);
         }
         return false;
     }
+
 }
