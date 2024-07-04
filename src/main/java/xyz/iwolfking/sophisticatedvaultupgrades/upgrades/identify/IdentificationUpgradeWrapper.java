@@ -14,6 +14,8 @@ import net.p3pp3rf1y.sophisticatedcore.api.ISlotChangeResponseUpgrade;
 import net.p3pp3rf1y.sophisticatedcore.api.IStorageWrapper;
 import net.p3pp3rf1y.sophisticatedcore.inventory.InventoryHandler;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.*;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -33,7 +35,7 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
 
     //Handles identifying items when it is picked up directly (outside of gui)
     @Override
-    public ItemStack pickup(Level level, ItemStack itemStack, boolean simulate) {
+    public @NotNull ItemStack pickup(@NotNull Level level, @NotNull ItemStack itemStack, boolean simulate) {
         tryIdentifyItem(itemStack, level);
         return itemStack;
     }
@@ -49,7 +51,11 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
         InventoryHandler storageInventory = storageWrapper.getInventoryHandler();
         for (int slot : slotsToIdentify) {
             ItemStack stack = storageInventory.getStackInSlot(slot);
-
+            if(stack.getItem() instanceof IdentifiableItem identifiableItem) {
+                if(!identifiableItem.getState(stack).equals(VaultGearState.UNIDENTIFIED)) {
+                    continue;
+                }
+            }
             if(entity instanceof Player player && getOwner(world) == null) {
                 tryIdentifyItem(stack, world, player);
             }
@@ -113,8 +119,11 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
     private void tryIdentifyItem(ItemStack stack, Level level, Player player) {
         if(player != null) {
             if(stack.getItem() instanceof IdentifiableItem identifiableItem) {
-                identifiableItem.instantIdentify(getOwner(level), stack);
+                identifiableItem.instantIdentify(player, stack);
             }
+        }
+        else {
+            tryIdentifyItem(stack, level);
         }
     }
 
@@ -122,7 +131,7 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
         Player player = getOwner(level);
         if(player != null) {
             if(stack.getItem() instanceof IdentifiableItem identifiableItem) {
-                identifiableItem.instantIdentify(getOwner(level), stack);
+                identifiableItem.instantIdentify(player, stack);
             }
         }
     }
