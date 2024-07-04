@@ -5,6 +5,12 @@ import net.minecraft.world.item.ItemStack;
 
 public class DiffuserUpgradeHelper {
     public static int getDiffuserValue(ItemStack stack) {
-        return ModConfigs.VAULT_DIFFUSER.getDiffuserOutputMap().get(stack.getItem().getRegistryName());
+        if(ModConfigs.VAULT_DIFFUSER.getDiffuserOutputMap().get(stack.getItem().getRegistryName()) != null) {
+            return ModConfigs.VAULT_DIFFUSER.getDiffuserOutputMap().get(stack.getItem().getRegistryName());
+        }
+        else {
+            return 0;
+        }
+
     }
 }
