@@ -31,6 +31,7 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
 
     public DiffuserUpgradeWrapper(IStorageWrapper storageWrapper, ItemStack upgrade, Consumer<ItemStack> upgradeSaveHandler) {
         super(storageWrapper, upgrade, upgradeSaveHandler);
+
         filterLogic = new FilterLogic(upgrade, upgradeSaveHandler, upgradeItem.getFilterSlotCount());
         filterLogic.setAllowByDefault(true);
         setShouldVoidOverflowDefaultOrLoadFromNbt(false);
@@ -38,6 +39,9 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
 
     @Override
     public @NotNull ItemStack onBeforeInsert(@NotNull IItemHandlerSimpleInserter inventoryHandler, int slot, @NotNull ItemStack stack, boolean simulate) {
+        if(stack.getItem().equals(ModItems.SOUL_DUST)) {
+            return stack;
+        }
         if (shouldVoidOverflow && inventoryHandler.getStackInSlot(slot).isEmpty() && (!filterLogic.shouldMatchNbt() || !filterLogic.shouldMatchDurability() || filterLogic.getPrimaryMatch() != PrimaryMatch.ITEM) && filterLogic.matchesFilter(stack)) {
             for (int s = 0; s < inventoryHandler.getSlots(); s++) {
                 if (s == slot) {
@@ -48,13 +52,20 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
                         continue;
                     }
                     int count = stack.getCount();
-                    return new ItemStack(ModItems.SOUL_DUST, DiffuserUpgradeHelper.getDiffuserValue(stack) * count);
+                    inventoryHandler.insertItem(new ItemStack(ModItems.SOUL_DUST, DiffuserUpgradeHelper.getDiffuserValue(stack) * count), false);
+                    return ItemStack.EMPTY;
                 }
             }
             return stack;
         }
-
-        return !shouldVoidOverflow && filterLogic.matchesFilter(stack) && DiffuserUpgradeHelper.getDiffuserValue(stack) != 0 ? new ItemStack(ModItems.SOUL_DUST, DiffuserUpgradeHelper.getDiffuserValue(stack)) : stack;
+        int count = stack.getCount();
+        if(!shouldVoidOverflow && filterLogic.matchesFilter(stack) && DiffuserUpgradeHelper.getDiffuserValue(stack) != 0) {
+            inventoryHandler.insertItem(new ItemStack(ModItems.SOUL_DUST, DiffuserUpgradeHelper.getDiffuserValue(stack) * count), false);
+            return ItemStack.EMPTY;
+        }
+        else {
+            return stack;
+        }
     }
 
     @Override
@@ -72,9 +83,11 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
         save();
     }
 
+
     public boolean shouldWorkInGUI() {
         return NBTHelper.getBoolean(upgrade, "shouldWorkInGUI").orElse(false);
     }
+
 
     public void setShouldVoidOverflow(boolean shouldVoidOverflow) {
         if (!shouldVoidOverflow && !upgradeItem.isVoidAnythingEnabled()) {
@@ -101,7 +114,7 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
         }
 
         ItemStack slotStack = inventoryHandler.getStackInSlot(slot);
-        if (filterLogic.matchesFilter(slotStack)) {
+        if (filterLogic.matchesFilter(slotStack) && DiffuserUpgradeHelper.getDiffuserValue(slotStack) != 0) {
             slotsToVoid.add(slot);
         }
     }
@@ -115,11 +128,14 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
         InventoryHandler storageInventory = storageWrapper.getInventoryHandler();
         for (int slot : slotsToVoid) {
             ItemStack stack = storageInventory.getStackInSlot(slot);
+            if(stack.getItem().equals(ModItems.SOUL_DUST)) {
+                continue;
+            }
             int soulValue = DiffuserUpgradeHelper.getDiffuserValue(stack);
             int itemCount = stack.getCount();
             if(soulValue != 0) {
-                storageInventory.extractItem(slot, itemCount, false);
                 storageInventory.insertItem(new ItemStack(ModItems.SOUL_DUST, itemCount * soulValue), false);
+                storageInventory.extractItem(slot, itemCount, false);
             }
         }
 
@@ -131,12 +147,16 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
         return shouldWorkInGUI();
     }
 
+
+
     @Override
     public @NotNull ItemStack onOverflow(@NotNull ItemStack stack) {
-        if(filterLogic.matchesFilter(stack)) {
+        if(filterLogic.matchesFilter(stack) && shouldVoidOverflow) {
             int count = stack.getCount();
             int soulValue = DiffuserUpgradeHelper.getDiffuserValue(stack);
-            return new ItemStack(ModItems.SOUL_DUST, count * soulValue);
+            if(soulValue != 0) {
+                return new ItemStack(ModItems.SOUL_DUST, count * soulValue);
+            }
         }
         return stack;
     }
@@ -149,6 +169,7 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
     public boolean isVoidAnythingEnabled() {
         return upgradeItem.isVoidAnythingEnabled();
     }
+
 
     @Override
     public int getSlotLimit() {

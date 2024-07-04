@@ -12,6 +12,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.p3pp3rf1y.sophisticatedbackpacks.Config;
 import net.p3pp3rf1y.sophisticatedbackpacks.SophisticatedBackpacks;
 import net.p3pp3rf1y.sophisticatedbackpacks.init.ModItems;
 import net.p3pp3rf1y.sophisticatedcore.client.gui.StorageScreenBase;
@@ -22,7 +23,6 @@ import net.p3pp3rf1y.sophisticatedcore.common.gui.UpgradeContainerType;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.voiding.VoidUpgradeContainer;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.voiding.VoidUpgradeTab;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.voiding.VoidUpgradeWrapper;
-import net.p3pp3rf1y.sophisticatedstorage.Config;
 import net.p3pp3rf1y.sophisticatedstorage.SophisticatedStorage;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.activation.ActivationUpgradeItem;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.diffuser.DiffuserUpgradeContainer;
@@ -46,7 +46,7 @@ public class ModItemsSophisticatedBP {
             () -> new DiffuserUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, Config.SERVER.voidUpgrade));
 
     public static final RegistryObject<DiffuserUpgradeItem> ADVANCED_DIFFUSER_UPGRADE = ITEMS.register("diffuser_upgrade_advanced",
-            () -> new DiffuserUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, Config.SERVER.advancedVoidUpgrade));
+            () -> new DiffuserUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.advancedVoidUpgrade));
     public static void registerHandlers(IEventBus modBus) {
         ITEMS.register(modBus);
         modBus.addGenericListener(MenuType.class, ModItemsSophisticatedBP::registerContainers);
@@ -58,9 +58,9 @@ public class ModItemsSophisticatedBP {
         UpgradeContainerRegistry.register(ADVANCED_DIFFUSER_UPGRADE.getId(), ADVANCED_DIFFUSER_TYPE);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             UpgradeGuiManager.registerTab(DIFFUSER_TYPE, (DiffuserUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->
-                    new DiffuserUpgradeTab.Basic(uc, p, s, Config.SERVER.voidUpgrade.slotsInRow.get()));
+                    new DiffuserUpgradeTab.Basic(uc, p, s, net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.voidUpgrade.slotsInRow.get()));
             UpgradeGuiManager.registerTab(ADVANCED_DIFFUSER_TYPE, (DiffuserUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->
-                    new DiffuserUpgradeTab.Advanced(uc, p, s, Config.SERVER.advancedVoidUpgrade.slotsInRow.get()));
+                    new DiffuserUpgradeTab.Advanced(uc, p, s, net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.advancedVoidUpgrade.slotsInRow.get()));
         });
     }
 }

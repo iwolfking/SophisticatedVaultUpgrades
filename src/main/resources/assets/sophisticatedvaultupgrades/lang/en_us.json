@@ -4,5 +4,10 @@
   "item.sophisticatedbackpacks.activator_upgrade": "Activator Upgrade",
   "item.sophisticatedbackpacks.identification_upgrade.tooltip": "Automatically identifies unidentified items that enter the backpack. Shift-right click to set owner.",
   "item.sophisticatedstorage.identification_upgrade.tooltip": "Automatically identifies unidentified items that enter the storage. Shift-right click to set owner.",
-  "item.sophisticatedbackpacks.activator_upgrade.tooltip": "Uses Treasure Keys from backpack inventory to open Treasure Doors when right-clicking them."
+  "item.sophisticatedbackpacks.activator_upgrade.tooltip": "Uses Treasure Keys from backpack inventory to open Treasure Doors when right-clicking them.",
+  "item.sophisticatedbackpacks.diffuser_upgrade": "Soul Diffuser Upgrade",
+  "item.sophisticatedbackpacks.diffuser_upgrade_advanced": "Advanced Soul Diffuser Upgrade",
+  "item.sophisticatedbackpacks.diffuser_upgrade.tooltip": "Automatically diffuses items with soul value into soul dust when they match the filter.",
+  "item.sophisticatedbackpacks.diffuser_upgrade_advanced.tooltip": "Automatically diffuses items with soul value into soul dust when they match the filter.",
+  "gui.sophisticatedbackpacks.upgrades.diffuser.tooltip": "Diffuser Settings"
 }
