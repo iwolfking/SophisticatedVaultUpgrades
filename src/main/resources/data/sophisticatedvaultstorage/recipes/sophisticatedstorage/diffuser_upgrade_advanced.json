@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XIX",
+    "LUL",
+    "XVX"
+  ],
+  "key": {
+    "I": {
+      "item": "the_vault:black_chromatic_steel_block"
+    },
+    "U": {
+      "item": "sophisticatedstorage:diffuser_upgrade"
+    },
+    "L": {
+      "item": "the_vault:gem_pog"
+    },
+    "V": {
+      "item": "the_vault:echo_pog"
+    },
+    "X": {
+      "item": "the_vault:wutodic_mass"
+    }
+  },
+  "result": {
+    "item": "sophisticatedstorage:diffuser_upgrade_advanced"
+  }
+}

@@ -1,5 +1,6 @@
 package xyz.iwolfking.sophisticatedvaultupgrades.events;
 
+import iskallia.vault.recipe.InitDollRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -29,4 +30,5 @@ public class InteractEvents {
                 }).orElse(false), false
         );
     }
+
 }

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XIX",
+    "LUL",
+    "XVX"
+  ],
+  "key": {
+    "I": {
+      "item": "the_vault:vault_harvester"
+    },
+    "U": {
+      "item": "sophisticatedstorage:upgrade_base"
+    },
+    "L": {
+      "item": "the_vault:perfect_black_opal"
+    },
+    "V": {
+      "item": "the_vault:gem_pog"
+    },
+    "X": {
+      "item": "the_vault:vault_diamond_block"
+    }
+  },
+  "result": {
+    "item": "sophisticatedstorage:diffuser_upgrade"
+  }
+}

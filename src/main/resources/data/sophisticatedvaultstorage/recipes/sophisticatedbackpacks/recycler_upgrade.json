@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XIX",
+    "LUL",
+    "XVX"
+  ],
+  "key": {
+    "I": {
+      "item": "the_vault:vault_recycler"
+    },
+    "U": {
+      "item": "sophisticatedbackpacks:upgrade_base"
+    },
+    "L": {
+      "item": "the_vault:extraordinary_black_opal"
+    },
+    "V": {
+      "item": "the_vault:echo_pog"
+    },
+    "X": {
+      "item": "the_vault:vault_diamond_block"
+    }
+  },
+  "result": {
+    "item": "sophisticatedbackpacks:recycler_upgrade"
+  }
+}

@@ -59,11 +59,15 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
                 }
             }
             if(entity instanceof Player player && getOwner(world) == null) {
-                tryIdentifyItem(stack, world, player, slot);
+                ItemStack identifiedStack = tryIdentifyItem(stack, world, player);
+                storageInventory.setStackInSlot(slot, ItemStack.EMPTY);
+                storageInventory.insertItem(identifiedStack, false);
             }
             else {
                 if(getOwner(world) != null) {
-                    tryIdentifyItem(stack, world, slot);
+                    ItemStack identifiedStack = tryIdentifyItem(stack, world);
+                    storageInventory.setStackInSlot(slot, ItemStack.EMPTY);
+                    storageInventory.insertItem(identifiedStack, false);
                 }
                 else {
                     //There is no player to use for identifying gear, so we do nothing
@@ -100,6 +104,10 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
         return (upgradeStack.getItem() instanceof IdentificationUpgradeItem identificationUpgradeItem && identificationUpgradeItem.getOwnerID(upgradeStack) != null);
     }
 
+    public static boolean hasOwner(ItemStack upgradeStack) {
+        return (upgradeStack.getItem() instanceof IdentificationUpgradeItem identificationUpgradeItem && identificationUpgradeItem.getOwnerID(upgradeStack) != null);
+    }
+
     public Player getOwner(Level world) {
         if(hasOwner()) {
             IdentificationUpgradeItem upgradeItem = (IdentificationUpgradeItem) upgradeStack.getItem();
@@ -118,48 +126,30 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
         return null;
     }
 
-    private void tryIdentifyItem(ItemStack stack, Level level, Player player) {
+
+
+    private ItemStack tryIdentifyItem(ItemStack stack, Level level, Player player) {
         if(player != null) {
             if(stack.getItem() instanceof IdentifiableItem identifiableItem) {
                 identifiableItem.instantIdentify(player, stack);
+                return stack.copy();
             }
         }
         else {
             tryIdentifyItem(stack, level);
         }
-
+        return stack.copy();
     }
 
-    private void tryIdentifyItem(ItemStack stack, Level level) {
+    private ItemStack tryIdentifyItem(ItemStack stack, Level level) {
         Player player = getOwner(level);
         if(player != null) {
             if(stack.getItem() instanceof IdentifiableItem identifiableItem) {
                 identifiableItem.instantIdentify(player, stack);
+                return stack.copy();
             }
         }
-    }
-
-    private void tryIdentifyItem(ItemStack stack, Level level, int slot) {
-        Player player = getOwner(level);
-        if(player != null) {
-            if(stack.getItem() instanceof IdentifiableItem identifiableItem) {
-                identifiableItem.instantIdentify(player, stack);
-                storageWrapper.getInventoryHandler().triggerOnChangeListeners(slot);
-            }
-        }
-    }
-
-    private void tryIdentifyItem(ItemStack stack, Level level, Player player, int slot) {
-        if(player != null) {
-            if(stack.getItem() instanceof IdentifiableItem identifiableItem) {
-                identifiableItem.instantIdentify(player, stack);
-                storageWrapper.getInventoryHandler().triggerOnChangeListeners(slot);
-            }
-        }
-        else {
-            tryIdentifyItem(stack, level);
-        }
-
+        return stack.copy();
     }
 
 }

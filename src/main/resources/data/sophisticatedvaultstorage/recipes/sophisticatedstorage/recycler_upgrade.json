@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XIX",
+    "LUL",
+    "XVX"
+  ],
+  "key": {
+    "I": {
+      "item": "the_vault:vault_recycler"
+    },
+    "U": {
+      "item": "sophisticatedstorage:upgrade_base"
+    },
+    "L": {
+      "item": "the_vault:chromatic_steel_block"
+    },
+    "V": {
+      "item": "the_vault:black_chromatic_steel_block"
+    },
+    "X": {
+      "item": "the_vault:gem_pog"
+    }
+  },
+  "result": {
+    "item": "sophisticatedstorage:recycler_upgrade"
+  }
+}

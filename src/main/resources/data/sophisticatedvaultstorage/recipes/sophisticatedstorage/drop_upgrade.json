@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XIX",
+    "LUL",
+    "XVX"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:dropper"
+    },
+    "U": {
+      "item": "sophisticatedstorage:upgrade_base"
+    },
+    "L": {
+      "item": "the_vault:vault_diamond"
+    },
+    "V": {
+      "item": "the_vault:perfect_larimar"
+    },
+    "X": {
+      "item": "the_vault:wooden_planks"
+    }
+  },
+  "result": {
+    "item": "sophisticatedstorage:drop_upgrade"
+  }
+}

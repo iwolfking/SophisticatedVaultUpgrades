@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XIX",
+    "LUL",
+    "XVX"
+  ],
+  "key": {
+    "I": {
+      "item": "the_vault:blank_key"
+    },
+    "U": {
+      "item": "sophisticatedbackpacks:upgrade_base"
+    },
+    "L": {
+      "item": "the_vault:echo_pog"
+    },
+    "V": {
+      "item": "the_vault:extraordinary_black_opal"
+    },
+    "X": {
+      "item": "the_vault:magic_silk_block"
+    }
+  },
+  "result": {
+    "item": "sophisticatedbackpacks:activator_upgrade"
+  }
+}

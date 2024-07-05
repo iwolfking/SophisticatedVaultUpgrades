@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XIX",
+    "LUL",
+    "XVX"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:redstone_block"
+    },
+    "U": {
+      "item": "sophisticatedbackpacks:upgrade_base"
+    },
+    "L": {
+      "item": "the_vault:chromatic_steel_ingot"
+    },
+    "V": {
+      "item": "the_vault:extraordinary_larimar"
+    },
+    "X": {
+      "item": "the_vault:magic_silk_block"
+    }
+  },
+  "result": {
+    "item": "sophisticatedbackpacks:drop_upgrade_advanced"
+  }
+}

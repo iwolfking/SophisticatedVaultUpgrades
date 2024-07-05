@@ -1,6 +1,7 @@
 package xyz.iwolfking.sophisticatedvaultupgrades.upgrades.identify;
 
 import com.mojang.authlib.GameProfile;
+import iskallia.vault.item.VaultDollItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -33,6 +34,9 @@ public class IdentificationUpgradeItem extends UpgradeItemBase<IdentificationUpg
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         tooltip.add(new TextComponent("Owner: " + getOwnerName(stack)));
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
+    }
+    public void onCraftedBy(ItemStack stack, Level level, Player player) {
+        setOwner(stack, player);
     }
 
     @Override
@@ -68,7 +72,7 @@ public class IdentificationUpgradeItem extends UpgradeItemBase<IdentificationUpg
         return UUID.fromString(l.getString(1));
     }
 
-    void setOwner(ItemStack stack, Player player) {
+    public void setOwner(ItemStack stack, Player player) {
         CompoundTag compound = stack.getOrCreateTag();
         ListTag owner = new ListTag();
         owner.add(StringTag.valueOf(player.getDisplayName().getString()));
