@@ -26,6 +26,7 @@ import net.p3pp3rf1y.sophisticatedcore.util.NBTHelper;
 import net.p3pp3rf1y.sophisticatedcore.util.RecipeHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jline.utils.DiffHelper;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.Collections;
@@ -181,62 +182,15 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
 
         //Attempt to add shards to pouch
         if (entity == null) {
-            world.getEntities(EntityType.PLAYER, new AABB(pos).inflate(3), p -> true).forEach(this::tryAndAddShardsToPouch);
+            world.getEntities(EntityType.PLAYER, new AABB(pos).inflate(3), p -> true).forEach((p) -> DiffuserUpgradeHelper.tryAndAddShardsToPouch(storageWrapper, p));
         } else {
-            tryAndAddShardsToPouch((Player)entity);
+            DiffuserUpgradeHelper.tryAndAddShardsToPouch(storageWrapper, (Player)entity);
         }
 
         setCooldown(world, COOLDOWN);
         slotsToVoid.clear();
     }
 
-    public boolean tryAndAddShardsToPouch(Player player) {
-        IItemHandlerModifiable inventory = storageWrapper.getInventoryForUpgradeProcessing();
-        if(InventoryHelper.isEmpty(inventory)) {
-            return false;
-        }
-
-        InventoryHelper.iterate(inventory, (slot, stack) -> {
-            if(stack.getItem().equals(ModItems.SOUL_SHARD)) {
-                if(!(player.containerMenu instanceof ShardPouchContainer)) {
-                    ItemStack pouchStack = ItemStack.EMPTY;
-                    if(CuriosApi.getCuriosHelper().findFirstCurio(player, ModItems.SHARD_POUCH).isPresent()) {
-                        pouchStack = CuriosApi.getCuriosHelper().findFirstCurio(player, ModItems.SHARD_POUCH).get().stack();
-                    }
-
-                    if (!pouchStack.isEmpty()) {
-                        pouchStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent((handler) -> {
-                            ItemStack remainder = handler.insertItem(0,InventoryHelper.extractFromInventory(stack, inventory, false), false);
-                            stack.setCount(remainder.getCount());
-                            if (stack.isEmpty()) {
-                            }
-                        });
-                    }
-                    if(pouchStack.isEmpty()) {
-                        Inventory thisInventory = player.getInventory();
-                        for(int playerSlot = 0; playerSlot < thisInventory.getContainerSize(); ++playerSlot) {
-                            ItemStack invStack = thisInventory.getItem(playerSlot);
-                            if (invStack.getItem() instanceof ItemShardPouch) {
-                                pouchStack = invStack;
-                                break;
-                            }
-                        }
-
-                        if (!pouchStack.isEmpty()) {
-                            pouchStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent((handler) -> {
-                                ItemStack remainder = handler.insertItem(0, InventoryHelper.extractFromInventory(stack, inventory, false), false);
-                                stack.setCount(remainder.getCount());
-                                if (stack.isEmpty()) {
-                                }
-                            });
-                        }
-                    }
-
-                }
-            }
-        });
-        return true;
-    }
 
     @Override
     public boolean worksInGui() {

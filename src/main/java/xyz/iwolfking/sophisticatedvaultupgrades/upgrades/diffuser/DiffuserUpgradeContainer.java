@@ -29,6 +29,12 @@ public class DiffuserUpgradeContainer extends UpgradeContainerBase<DiffuserUpgra
         } else if (data.contains(DATA_SHOULD_VOID_OVERFLOW)) {
             setShouldVoidOverflow(data.getBoolean(DATA_SHOULD_VOID_OVERFLOW));
         }
+        else if(data.contains(DATA_SHOULD_COMPACT_SHARDS)) {
+            setShouldCompactShards(data.getBoolean(DATA_SHOULD_COMPACT_SHARDS));
+        }
+        else if(data.contains(DATA_SHOULD_HOLD_SHARDS)) {
+            setShouldHoldShards(data.getBoolean(DATA_SHOULD_HOLD_SHARDS));
+        }
         filterLogicContainer.handleMessage(data);
     }
 

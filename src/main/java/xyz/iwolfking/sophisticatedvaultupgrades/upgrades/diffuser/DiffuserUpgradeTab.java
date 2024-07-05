@@ -2,10 +2,7 @@ package xyz.iwolfking.sophisticatedvaultupgrades.upgrades.diffuser;
 
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.*;
 import net.p3pp3rf1y.sophisticatedcore.client.gui.StorageScreenBase;
 import net.p3pp3rf1y.sophisticatedcore.client.gui.UpgradeSettingsTab;
 import net.p3pp3rf1y.sophisticatedcore.client.gui.controls.ButtonDefinition;
@@ -15,23 +12,32 @@ import net.p3pp3rf1y.sophisticatedcore.client.gui.utils.*;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.FilterLogic;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.FilterLogicContainer;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.FilterLogicControl;
+import xyz.iwolfking.sophisticatedvaultupgrades.SophisticatedVaultUpgrades;
 
+import java.util.List;
 import java.util.Map;
 
 import static net.p3pp3rf1y.sophisticatedcore.client.gui.utils.GuiHelper.getButtonStateData;
 
 public class DiffuserUpgradeTab extends UpgradeSettingsTab<DiffuserUpgradeContainer> {
+
+    public static final TextureBlitData COMPACT_SHARD = new TextureBlitData(SophisticatedVaultUpgrades.loc("textures/gui/compact_shard.png"), new Position(1,1), Dimension.SQUARE_16, new UV(0,0), Dimension.SQUARE_16);
+    public static final TextureBlitData NO_SHARD = new TextureBlitData(SophisticatedVaultUpgrades.loc("textures/gui/no_shard.png"), new Position(1,1), Dimension.SQUARE_16, new UV(0,0), Dimension.SQUARE_16);
+    public static final TextureBlitData KEEP_INVENTORY = new TextureBlitData(SophisticatedVaultUpgrades.loc("textures/gui/keep_inventory.png"), new Position(1,1), Dimension.SQUARE_16, new UV(0,0), Dimension.SQUARE_16);
+    public static final TextureBlitData SEND_POUCH = new TextureBlitData(SophisticatedVaultUpgrades.loc("textures/gui/send_pouch.png"), new Position(1,1), Dimension.SQUARE_16, new UV(0,0), Dimension.SQUARE_16);
     private static final MutableComponent VOID_OVERFLOW_TOOLTIP = new TextComponent("Diffuse Overflow");
     private static final MutableComponent VOID_OVERFLOW_TOOLTIP_DETAIL = new TextComponent("Automatically diffuse items when they overflow.").withStyle(ChatFormatting.GRAY);
     private static final MutableComponent VOID_ANYTHING_DISABLED_TOOLTIP = new TextComponent("Diffuse Overflow").withStyle(ChatFormatting.RED);
 
-    private static final MutableComponent COMPACT_SHARD_TOOLTIP = new TextComponent("Do Compact");
-    private static final MutableComponent COMPACT_SHARD_DETAIL = new TextComponent("Compacts dust into shards automatically.").withStyle(ChatFormatting.GRAY);
-    private static final MutableComponent COMPACT_SHARD_DISABLE = new TextComponent("Don't Compact").withStyle(ChatFormatting.RED);
+    private static final MutableComponent COMPACT_SHARD_TOOLTIP = new TextComponent("Compact to Shards");
+    private static final MutableComponent COMPACT_SHARD_DETAIL = new TextComponent("Compacts Soul Dust into Soul Shards").withStyle(ChatFormatting.GRAY);
+    private static final MutableComponent NO_SHARD_TOOLTIP = new TextComponent("Keep as Dust");
+    private static final MutableComponent NO_SHARD_DETAIL = new TextComponent("Don't Compact into Soul Shards.").withStyle(ChatFormatting.GRAY);
 
     private static final MutableComponent HOLD_SHARDS = new TextComponent("Hold Shards");
-    private static final MutableComponent HOLD_SHARDS_DETAIL = new TextComponent("Either holds shards in backpack or sends to Shard Pouch.").withStyle(ChatFormatting.GRAY);
-    private static final MutableComponent BAG_SHARDS = new TextComponent("Send to Pouch").withStyle(ChatFormatting.LIGHT_PURPLE);
+    private static final MutableComponent SEND_TO_POUCH = new TextComponent("Send to Shard Pouch");
+    private static final MutableComponent HOLD_SHARDS_TOOLTIP = new TextComponent("Holds Soul Shards inside this inventory.").withStyle(ChatFormatting.GRAY);
+    private static final MutableComponent SEND_POUCH_TOOLTIP = new TextComponent("Sends shards into your Shard Pouch.").withStyle(ChatFormatting.GRAY);
     private static final ButtonDefinition.Toggle<Boolean> VOID_OVERFLOW = ButtonDefinitions.createToggleButtonDefinition(
             Map.of(
                     true, getButtonStateData(new UV(224, 16), Dimension.SQUARE_16, new Position(1, 1), VOID_OVERFLOW_TOOLTIP, VOID_OVERFLOW_TOOLTIP_DETAIL),
@@ -39,20 +45,21 @@ public class DiffuserUpgradeTab extends UpgradeSettingsTab<DiffuserUpgradeContai
             ));
     private static final ButtonDefinition.Toggle<Boolean> VOID_OVERFLOW_ONLY = ButtonDefinitions.createToggleButtonDefinition(
             Map.of(
+
                     true, getButtonStateData(new UV(224, 16), Dimension.SQUARE_16, new Position(1, 1), VOID_OVERFLOW_TOOLTIP, VOID_OVERFLOW_TOOLTIP_DETAIL, VOID_ANYTHING_DISABLED_TOOLTIP),
                     false, getButtonStateData(new UV(208, 16), "Diffuse Any", Dimension.SQUARE_16, new Position(1, 1))
             ));
 
     private static final ButtonDefinition.Toggle<Boolean> COMPACT_SHARDS_BTN = ButtonDefinitions.createToggleButtonDefinition(
             Map.of(
-                    true, getButtonStateData(new UV(224, 16), Dimension.SQUARE_16, new Position(1, 1), COMPACT_SHARD_TOOLTIP, COMPACT_SHARD_DETAIL, COMPACT_SHARD_DISABLE),
-                    false, getButtonStateData(new UV(208, 16), "Compact Shards", Dimension.SQUARE_16, new Position(1, 1))
+                    true, new ToggleButton.StateData(COMPACT_SHARD, List.of(COMPACT_SHARD_TOOLTIP, COMPACT_SHARD_DETAIL)),
+                    false, new ToggleButton.StateData(NO_SHARD, List.of(NO_SHARD_TOOLTIP, NO_SHARD_DETAIL))
             ));
 
     private static final ButtonDefinition.Toggle<Boolean> HOLD_SHARDS_BTN = ButtonDefinitions.createToggleButtonDefinition(
             Map.of(
-                    true, getButtonStateData(new UV(224, 16), Dimension.SQUARE_16, new Position(1, 1), HOLD_SHARDS, HOLD_SHARDS_DETAIL, BAG_SHARDS),
-                    false, getButtonStateData(new UV(208, 16), "Hold Shards", Dimension.SQUARE_16, new Position(1, 1))
+                    true, new ToggleButton.StateData(KEEP_INVENTORY, List.of(HOLD_SHARDS, HOLD_SHARDS_TOOLTIP)),
+                    false, new ToggleButton.StateData(SEND_POUCH, List.of(SEND_TO_POUCH, SEND_POUCH_TOOLTIP))
             ));
 
     protected FilterLogicControl<FilterLogic, FilterLogicContainer<FilterLogic>> filterLogicControl;
