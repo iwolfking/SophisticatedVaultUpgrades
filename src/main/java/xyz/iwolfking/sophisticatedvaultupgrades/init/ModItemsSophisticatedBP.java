@@ -29,7 +29,15 @@ import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.diffuser.DiffuserUpgrad
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.diffuser.DiffuserUpgradeItem;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.diffuser.DiffuserUpgradeTab;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.diffuser.DiffuserUpgradeWrapper;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.drop.DropUpgradeContainer;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.drop.DropUpgradeItem;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.drop.DropUpgradeTab;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.drop.DropUpgradeWrapper;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.identify.IdentificationUpgradeItem;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.recycler.RecyclerUpgradeContainer;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.recycler.RecyclerUpgradeItem;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.recycler.RecyclerUpgradeTab;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.recycler.RecyclerUpgradeWrapper;
 
 public class ModItemsSophisticatedBP {
     private ModItemsSophisticatedBP() {
@@ -47,20 +55,49 @@ public class ModItemsSophisticatedBP {
 
     public static final RegistryObject<DiffuserUpgradeItem> ADVANCED_DIFFUSER_UPGRADE = ITEMS.register("diffuser_upgrade_advanced",
             () -> new DiffuserUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.advancedVoidUpgrade));
+
+    public static final RegistryObject<RecyclerUpgradeItem> RECYCLER_UPGRADE = ITEMS.register("recycler_upgrade",
+            () -> new RecyclerUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, Config.SERVER.voidUpgrade));
+
+    public static final RegistryObject<RecyclerUpgradeItem> ADVANCED_RECYCLER_UPGRADE = ITEMS.register("recycler_upgrade_advanced",
+            () -> new RecyclerUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, Config.SERVER.advancedVoidUpgrade));
+
+    public static final RegistryObject<DropUpgradeItem> DROP_UPGRADE = ITEMS.register("drop_upgrade",
+            () -> new DropUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, Config.SERVER.voidUpgrade));
+
+    public static final RegistryObject<DropUpgradeItem> ADVANCED_DROP_UPGRADE = ITEMS.register("drop_upgrade_advanced",
+            () -> new DropUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, Config.SERVER.advancedVoidUpgrade));
+
     public static void registerHandlers(IEventBus modBus) {
         ITEMS.register(modBus);
         modBus.addGenericListener(MenuType.class, ModItemsSophisticatedBP::registerContainers);
     }
     private static final UpgradeContainerType<DiffuserUpgradeWrapper, DiffuserUpgradeContainer> DIFFUSER_TYPE = new UpgradeContainerType<>(DiffuserUpgradeContainer::new);
+    private static final UpgradeContainerType<RecyclerUpgradeWrapper, RecyclerUpgradeContainer> RECYCLER_TYPE = new UpgradeContainerType<>(RecyclerUpgradeContainer::new);
+    private static final UpgradeContainerType<DropUpgradeWrapper, DropUpgradeContainer> DROP_TYPE = new UpgradeContainerType<>(DropUpgradeContainer::new);
+    private static final UpgradeContainerType<RecyclerUpgradeWrapper, RecyclerUpgradeContainer> ADVANCED_RECYCLER_TYPE = new UpgradeContainerType<>(RecyclerUpgradeContainer::new);
+    private static final UpgradeContainerType<DropUpgradeWrapper, DropUpgradeContainer> ADVANCED_DROP_TYPE = new UpgradeContainerType<>(DropUpgradeContainer::new);
     private static final UpgradeContainerType<DiffuserUpgradeWrapper, DiffuserUpgradeContainer> ADVANCED_DIFFUSER_TYPE = new UpgradeContainerType<>(DiffuserUpgradeContainer::new);
     public static void registerContainers(RegistryEvent.Register<MenuType<?>> evt) {
         UpgradeContainerRegistry.register(DIFFUSER_UPGRADE.getId(), DIFFUSER_TYPE);
+        UpgradeContainerRegistry.register(RECYCLER_UPGRADE.getId(), RECYCLER_TYPE);
+        UpgradeContainerRegistry.register(DROP_UPGRADE.getId(), DROP_TYPE);
+        UpgradeContainerRegistry.register(ADVANCED_RECYCLER_UPGRADE.getId(), ADVANCED_RECYCLER_TYPE);
         UpgradeContainerRegistry.register(ADVANCED_DIFFUSER_UPGRADE.getId(), ADVANCED_DIFFUSER_TYPE);
+        UpgradeContainerRegistry.register(ADVANCED_DROP_UPGRADE.getId(), ADVANCED_DROP_TYPE);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             UpgradeGuiManager.registerTab(DIFFUSER_TYPE, (DiffuserUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->
                     new DiffuserUpgradeTab.Basic(uc, p, s, net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.voidUpgrade.slotsInRow.get()));
             UpgradeGuiManager.registerTab(ADVANCED_DIFFUSER_TYPE, (DiffuserUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->
                     new DiffuserUpgradeTab.Advanced(uc, p, s, net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.advancedVoidUpgrade.slotsInRow.get()));
+            UpgradeGuiManager.registerTab(RECYCLER_TYPE, (RecyclerUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->
+                    new RecyclerUpgradeTab.Basic(uc, p, s, Config.SERVER.voidUpgrade.slotsInRow.get()));
+            UpgradeGuiManager.registerTab(ADVANCED_RECYCLER_TYPE, (RecyclerUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->
+                    new RecyclerUpgradeTab.Advanced(uc, p, s, net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.advancedVoidUpgrade.slotsInRow.get()));
+            UpgradeGuiManager.registerTab(DROP_TYPE, (DropUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->
+                    new DropUpgradeTab.Basic(uc, p, s, Config.SERVER.voidUpgrade.slotsInRow.get()));
+            UpgradeGuiManager.registerTab(ADVANCED_DROP_TYPE, (DropUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->
+                    new DropUpgradeTab.Advanced(uc, p, s, net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.advancedVoidUpgrade.slotsInRow.get()));
         });
     }
 }

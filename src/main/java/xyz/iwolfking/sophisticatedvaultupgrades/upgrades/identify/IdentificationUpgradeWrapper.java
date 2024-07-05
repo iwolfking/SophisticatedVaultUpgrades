@@ -59,11 +59,11 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
                 }
             }
             if(entity instanceof Player player && getOwner(world) == null) {
-                tryIdentifyItem(stack, world, player);
+                tryIdentifyItem(stack, world, player, slot);
             }
             else {
                 if(getOwner(world) != null) {
-                    tryIdentifyItem(stack, world);
+                    tryIdentifyItem(stack, world, slot);
                 }
                 else {
                     //There is no player to use for identifying gear, so we do nothing
@@ -127,6 +127,7 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
         else {
             tryIdentifyItem(stack, level);
         }
+
     }
 
     private void tryIdentifyItem(ItemStack stack, Level level) {
@@ -138,6 +139,27 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
         }
     }
 
+    private void tryIdentifyItem(ItemStack stack, Level level, int slot) {
+        Player player = getOwner(level);
+        if(player != null) {
+            if(stack.getItem() instanceof IdentifiableItem identifiableItem) {
+                identifiableItem.instantIdentify(player, stack);
+                storageWrapper.getInventoryHandler().triggerOnChangeListeners(slot);
+            }
+        }
+    }
 
+    private void tryIdentifyItem(ItemStack stack, Level level, Player player, int slot) {
+        if(player != null) {
+            if(stack.getItem() instanceof IdentifiableItem identifiableItem) {
+                identifiableItem.instantIdentify(player, stack);
+                storageWrapper.getInventoryHandler().triggerOnChangeListeners(slot);
+            }
+        }
+        else {
+            tryIdentifyItem(stack, level);
+        }
+
+    }
 
 }
