@@ -36,7 +36,9 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
     //Handles identifying items when it is picked up directly (outside of gui)
     @Override
     public @NotNull ItemStack pickup(@NotNull Level level, @NotNull ItemStack itemStack, boolean simulate) {
-        tryIdentifyItem(itemStack, level);
+        if(!simulate) {
+            tryIdentifyItem(itemStack, level);
+        }
         return itemStack;
     }
 

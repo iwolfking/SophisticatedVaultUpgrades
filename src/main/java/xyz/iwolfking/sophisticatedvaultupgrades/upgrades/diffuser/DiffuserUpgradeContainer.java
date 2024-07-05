@@ -13,6 +13,8 @@ import net.p3pp3rf1y.sophisticatedcore.util.NBTHelper;
 public class DiffuserUpgradeContainer extends UpgradeContainerBase<DiffuserUpgradeWrapper, DiffuserUpgradeContainer> {
     private static final String DATA_SHOULD_WORKD_IN_GUI = "shouldWorkdInGUI";
     private static final String DATA_SHOULD_VOID_OVERFLOW = "shouldVoidOverflow";
+    private static final String DATA_SHOULD_HOLD_SHARDS = "shouldHoldShards";
+    private static final String DATA_SHOULD_COMPACT_SHARDS = "shouldCompactShards";
     private final FilterLogicContainer<FilterLogic> filterLogicContainer;
 
     public DiffuserUpgradeContainer(Player player, int containerId, DiffuserUpgradeWrapper wrapper, UpgradeContainerType<DiffuserUpgradeWrapper, DiffuserUpgradeContainer> type) {
@@ -39,16 +41,35 @@ public class DiffuserUpgradeContainer extends UpgradeContainerBase<DiffuserUpgra
         sendDataToServer(() -> NBTHelper.putBoolean(new CompoundTag(), DATA_SHOULD_WORKD_IN_GUI, shouldWorkdInGUI));
     }
 
+    public void setShouldHoldShards(boolean shouldHoldShards) {
+        upgradeWrapper.setShouldHoldShards(shouldHoldShards);
+        sendDataToServer(() -> NBTHelper.putBoolean(new CompoundTag(), DATA_SHOULD_HOLD_SHARDS, shouldHoldShards));
+    }
+
+    public void setShouldCompactShards(boolean shouldCompactShards) {
+        upgradeWrapper.setShouldCompactShards(shouldCompactShards);
+        sendDataToServer(() -> NBTHelper.putBoolean(new CompoundTag(), DATA_SHOULD_COMPACT_SHARDS, shouldCompactShards));
+    }
+
     public void setShouldVoidOverflow(boolean shouldVoidOverflow) {
         upgradeWrapper.setShouldVoidOverflow(shouldVoidOverflow);
         sendDataToServer(() -> NBTHelper.putBoolean(new CompoundTag(), DATA_SHOULD_VOID_OVERFLOW, shouldVoidOverflow));
     }
 
-    public boolean shouldWorkInGUI() {
-        return upgradeWrapper.shouldWorkInGUI();
-    }
 
     public boolean shouldVoidOverflow() {
         return upgradeWrapper.shouldVoidOverflow();
+    }
+
+    public Boolean shouldCompactShards() {
+        return upgradeWrapper.shouldCompactShards();
+    }
+
+    public Boolean shouldHoldShards() {
+        return upgradeWrapper.shouldHoldShards();
+    }
+
+    public Boolean shouldWorkInGUI() {
+        return upgradeWrapper.worksInGui();
     }
 }

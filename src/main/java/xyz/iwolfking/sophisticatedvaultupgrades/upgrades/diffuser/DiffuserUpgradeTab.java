@@ -11,10 +11,7 @@ import net.p3pp3rf1y.sophisticatedcore.client.gui.UpgradeSettingsTab;
 import net.p3pp3rf1y.sophisticatedcore.client.gui.controls.ButtonDefinition;
 import net.p3pp3rf1y.sophisticatedcore.client.gui.controls.ButtonDefinitions;
 import net.p3pp3rf1y.sophisticatedcore.client.gui.controls.ToggleButton;
-import net.p3pp3rf1y.sophisticatedcore.client.gui.utils.Dimension;
-import net.p3pp3rf1y.sophisticatedcore.client.gui.utils.Position;
-import net.p3pp3rf1y.sophisticatedcore.client.gui.utils.TranslationHelper;
-import net.p3pp3rf1y.sophisticatedcore.client.gui.utils.UV;
+import net.p3pp3rf1y.sophisticatedcore.client.gui.utils.*;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.FilterLogic;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.FilterLogicContainer;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.FilterLogicControl;
@@ -26,8 +23,15 @@ import static net.p3pp3rf1y.sophisticatedcore.client.gui.utils.GuiHelper.getButt
 public class DiffuserUpgradeTab extends UpgradeSettingsTab<DiffuserUpgradeContainer> {
     private static final MutableComponent VOID_OVERFLOW_TOOLTIP = new TextComponent("Diffuse Overflow");
     private static final MutableComponent VOID_OVERFLOW_TOOLTIP_DETAIL = new TextComponent("Automatically diffuse items when they overflow.").withStyle(ChatFormatting.GRAY);
-
     private static final MutableComponent VOID_ANYTHING_DISABLED_TOOLTIP = new TextComponent("Diffuse Overflow").withStyle(ChatFormatting.RED);
+
+    private static final MutableComponent COMPACT_SHARD_TOOLTIP = new TextComponent("Do Compact");
+    private static final MutableComponent COMPACT_SHARD_DETAIL = new TextComponent("Compacts dust into shards automatically.").withStyle(ChatFormatting.GRAY);
+    private static final MutableComponent COMPACT_SHARD_DISABLE = new TextComponent("Don't Compact").withStyle(ChatFormatting.RED);
+
+    private static final MutableComponent HOLD_SHARDS = new TextComponent("Hold Shards");
+    private static final MutableComponent HOLD_SHARDS_DETAIL = new TextComponent("Either holds shards in backpack or sends to Shard Pouch.").withStyle(ChatFormatting.GRAY);
+    private static final MutableComponent BAG_SHARDS = new TextComponent("Send to Pouch").withStyle(ChatFormatting.LIGHT_PURPLE);
     private static final ButtonDefinition.Toggle<Boolean> VOID_OVERFLOW = ButtonDefinitions.createToggleButtonDefinition(
             Map.of(
                     true, getButtonStateData(new UV(224, 16), Dimension.SQUARE_16, new Position(1, 1), VOID_OVERFLOW_TOOLTIP, VOID_OVERFLOW_TOOLTIP_DETAIL),
@@ -37,6 +41,18 @@ public class DiffuserUpgradeTab extends UpgradeSettingsTab<DiffuserUpgradeContai
             Map.of(
                     true, getButtonStateData(new UV(224, 16), Dimension.SQUARE_16, new Position(1, 1), VOID_OVERFLOW_TOOLTIP, VOID_OVERFLOW_TOOLTIP_DETAIL, VOID_ANYTHING_DISABLED_TOOLTIP),
                     false, getButtonStateData(new UV(208, 16), "Diffuse Any", Dimension.SQUARE_16, new Position(1, 1))
+            ));
+
+    private static final ButtonDefinition.Toggle<Boolean> COMPACT_SHARDS_BTN = ButtonDefinitions.createToggleButtonDefinition(
+            Map.of(
+                    true, getButtonStateData(new UV(224, 16), Dimension.SQUARE_16, new Position(1, 1), COMPACT_SHARD_TOOLTIP, COMPACT_SHARD_DETAIL, COMPACT_SHARD_DISABLE),
+                    false, getButtonStateData(new UV(208, 16), "Compact Shards", Dimension.SQUARE_16, new Position(1, 1))
+            ));
+
+    private static final ButtonDefinition.Toggle<Boolean> HOLD_SHARDS_BTN = ButtonDefinitions.createToggleButtonDefinition(
+            Map.of(
+                    true, getButtonStateData(new UV(224, 16), Dimension.SQUARE_16, new Position(1, 1), HOLD_SHARDS, HOLD_SHARDS_DETAIL, BAG_SHARDS),
+                    false, getButtonStateData(new UV(208, 16), "Hold Shards", Dimension.SQUARE_16, new Position(1, 1))
             ));
 
     protected FilterLogicControl<FilterLogic, FilterLogicContainer<FilterLogic>> filterLogicControl;
@@ -56,7 +72,7 @@ public class DiffuserUpgradeTab extends UpgradeSettingsTab<DiffuserUpgradeContai
 
     public static class Basic extends DiffuserUpgradeTab {
         public Basic(DiffuserUpgradeContainer upgradeContainer, Position position, StorageScreenBase<?> screen, int slotsPerRow) {
-            super(upgradeContainer, position, screen, new TextComponent("Soul Diffuser"), new TextComponent("Soul Diffuser Settings"));
+            super(upgradeContainer, position, screen, new TextComponent("Soul Diffuser"), new TextComponent("Soul Diffuser"));
             filterLogicControl = addHideableChild(new FilterLogicControl.Basic(screen, new Position(x + 3, y + 44), getContainer().getFilterLogicContainer(),
                     slotsPerRow));
         }
@@ -64,7 +80,11 @@ public class DiffuserUpgradeTab extends UpgradeSettingsTab<DiffuserUpgradeContai
 
     public static class Advanced extends DiffuserUpgradeTab {
         public Advanced(DiffuserUpgradeContainer upgradeContainer, Position position, StorageScreenBase<?> screen, int slotsPerRow) {
-            super(upgradeContainer, position, screen, new TextComponent("Advanced Soul Diffuser"), new TextComponent("Advanced Soul Diffuser Settings"));
+            super(upgradeContainer, position, screen, new TextComponent("Soul Diffuser"), new TextComponent("Soul Diffuser"));
+            addHideableChild(new ToggleButton<>(new Position(x + 39, y + 24), COMPACT_SHARDS_BTN, button -> getContainer().setShouldCompactShards(!getContainer().shouldCompactShards()),
+                    getContainer()::shouldCompactShards));
+            addHideableChild(new ToggleButton<>(new Position(x + 57, y + 24), HOLD_SHARDS_BTN, button -> getContainer().setShouldHoldShards(!getContainer().shouldHoldShards()),
+                    getContainer()::shouldHoldShards));
             filterLogicControl = addHideableChild(new FilterLogicControl.Advanced(screen, new Position(x + 3, y + 44), getContainer().getFilterLogicContainer(),
                     slotsPerRow));
         }
