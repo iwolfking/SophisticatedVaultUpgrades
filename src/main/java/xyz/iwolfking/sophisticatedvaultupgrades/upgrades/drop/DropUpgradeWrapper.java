@@ -109,6 +109,9 @@ public class DropUpgradeWrapper extends UpgradeWrapperBase<DropUpgradeWrapper, D
 
         InventoryHandler storageInventory = storageWrapper.getInventoryHandler();
         for (int slot : slotsToVoid) {
+            if(!stackMatchesFilter(storageInventory.getStackInSlot(slot))) {
+                continue;
+            }
             DropUpgradeHelper.dropStackAtPosition(storageInventory, slot, world, pos, false);
 
         }

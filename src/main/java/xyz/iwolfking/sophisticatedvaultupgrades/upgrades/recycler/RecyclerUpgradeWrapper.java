@@ -100,6 +100,9 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
         InventoryHandler storageInventory = storageWrapper.getInventoryHandler();
         for (int slot : slotsToVoid) {
             ItemStack stack = storageInventory.getStackInSlot(slot);
+            if(!stackMatchesFilter(stack)) {
+                continue;
+            }
             List<ItemStack> outputs = RecyclerUpgradeHelper.getVaultRecyclerOutputs(stack);
             for(ItemStack recycleStack : outputs) {
                 storageInventory.insertItem(recycleStack, false);

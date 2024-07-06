@@ -162,6 +162,9 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
         InventoryHandler storageInventory = storageWrapper.getInventoryHandler();
         for (int slot : slotsToVoid) {
             ItemStack stack = storageInventory.getStackInSlot(slot);
+            if(!stackMatchesFilter(stack)) {
+                continue;
+            }
             if(stack.getItem().equals(ModItems.SOUL_DUST) || stack.getItem().equals(ModItems.SOUL_SHARD)) {
                 continue;
             }
