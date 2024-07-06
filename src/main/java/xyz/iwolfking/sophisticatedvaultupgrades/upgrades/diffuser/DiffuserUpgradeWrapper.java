@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SuspiciousStewItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.fml.common.Mod;
@@ -20,10 +21,12 @@ import net.p3pp3rf1y.sophisticatedcore.api.ISlotChangeResponseUpgrade;
 import net.p3pp3rf1y.sophisticatedcore.api.IStorageWrapper;
 import net.p3pp3rf1y.sophisticatedcore.inventory.IItemHandlerSimpleInserter;
 import net.p3pp3rf1y.sophisticatedcore.inventory.InventoryHandler;
+import net.p3pp3rf1y.sophisticatedcore.inventory.InventoryHandlerSlotTracker;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.*;
 import net.p3pp3rf1y.sophisticatedcore.util.InventoryHelper;
 import net.p3pp3rf1y.sophisticatedcore.util.NBTHelper;
 import net.p3pp3rf1y.sophisticatedcore.util.RecipeHelper;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jline.utils.DiffHelper;
@@ -37,17 +40,18 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWrapper, DiffuserUpgradeItem>
-        implements IInsertResponseUpgrade, IFilteredUpgrade, ISlotChangeResponseUpgrade, ITickableUpgrade, IOverflowResponseUpgrade, ISlotLimitUpgrade {
+        implements IInsertResponseUpgrade, IFilteredUpgrade, ISlotChangeResponseUpgrade, ITickableUpgrade, IOverflowResponseUpgrade {
     private final FilterLogic filterLogic;
     private final Set<Integer> slotsToVoid = new HashSet<>();
+    private final Set<Integer> remainderSlotsToVoid = new HashSet<>();
     private boolean shouldVoidOverflow;
 
-    private static final int COOLDOWN = 100;
+    private static final int INSERTING_COOLDOWN = 10;
+    private static final int SHARD_POUCH_COOLDOWN = 20;
 
     public DiffuserUpgradeWrapper(IStorageWrapper storageWrapper, ItemStack upgrade, Consumer<ItemStack> upgradeSaveHandler) {
         super(storageWrapper, upgrade, upgradeSaveHandler);
         filterLogic = new FilterLogic(upgrade, upgradeSaveHandler, upgradeItem.getFilterSlotCount());
-        filterLogic.setAllowByDefault(true);
         setShouldVoidOverflowDefaultOrLoadFromNbt(false);
     }
 
@@ -64,21 +68,27 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
                     continue;
                 }
                 if (stackMatchesFilterStack(inventoryHandler.getStackInSlot(s), stack)) {
-                    if(DiffuserUpgradeHelper.getDiffuserValue(stack) == 0) {
-                        continue;
+                    ItemStack remainderStack = insertDiffusedDust((InventoryHandler) inventoryHandler, slot, stack, simulate, false);
+                    if(remainderStack.isEmpty()) {
+                        return ItemStack.EMPTY;
                     }
-                    int count = stack.getCount();
-                    inventoryHandler.insertItem(new ItemStack(ModItems.SOUL_DUST, DiffuserUpgradeHelper.getDiffuserValue(stack) * count), simulate);
-                    return ItemStack.EMPTY;
+                    else {
+                        return remainderStack;
+                    }
+
                 }
             }
             return stack;
         }
 
         if(!shouldVoidOverflow && filterLogic.matchesFilter(stack) && DiffuserUpgradeHelper.getDiffuserValue(stack) != 0) {
-            int count = stack.getCount();
-            inventoryHandler.insertItem(new ItemStack(ModItems.SOUL_DUST, DiffuserUpgradeHelper.getDiffuserValue(stack) * count), simulate);
-            return ItemStack.EMPTY;
+            ItemStack remainderStack = insertDiffusedDust((InventoryHandler) inventoryHandler, slot, stack, simulate, false);
+            if(remainderStack.isEmpty()) {
+                return ItemStack.EMPTY;
+            }
+            else {
+                return remainderStack;
+            }
         }
         else {
             return stack;
@@ -87,12 +97,7 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
 
     @Override
     public void onAfterInsert(@NotNull IItemHandlerSimpleInserter inventoryHandler, int slot) {
-        if(!shouldCompactShards()) {
-            return;
-        }
-        if(inventoryHandler.getStackInSlot(slot).getItem().equals(ModItems.SOUL_DUST)) {
-            compactDust(inventoryHandler, slot);
-        }
+        //no-op
     }
 
     @Override
@@ -161,6 +166,9 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
 
     @Override
     public void tick(@Nullable LivingEntity entity, Level world, BlockPos pos) {
+        if(isInCooldown(world)) {
+            return;
+        }
         InventoryHandler storageInventory = storageWrapper.getInventoryHandler();
         for (int slot : slotsToVoid) {
             ItemStack stack = storageInventory.getStackInSlot(slot);
@@ -168,15 +176,40 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
                 continue;
             }
             int soulValue = DiffuserUpgradeHelper.getDiffuserValue(stack);
-            int itemCount = stack.getCount();
             if(soulValue != 0) {
-                storageInventory.insertItem(new ItemStack(ModItems.SOUL_DUST, itemCount * soulValue), false);
-                storageInventory.extractItem(slot, itemCount, false);
+                if(insertDiffusedDust(storageInventory, slot, stack, false, true).isEmpty()) {
+
+                }
             }
         }
 
-        //We only want to move to shard pouch when the cooldown is finished
-        if(isInCooldown(world) || shouldHoldShards()) {
+        if(!remainderSlotsToVoid.isEmpty()){
+            List<Integer> remainderSlotList = remainderSlotsToVoid.stream().toList();
+            for(int i = 0; i < remainderSlotList.size(); i++) {
+                int slot = remainderSlotList.get(i);
+                ItemStack slotStack = storageInventory.getStackInSlot(slot);
+                if(!slotStack.isEmpty() && stackMatchesFilter(slotStack)) {
+                    if(insertDiffusedDust(storageInventory, slot, slotStack, false, true).isEmpty()) {
+                        remainderSlotsToVoid.remove(slot);
+                    }
+                }
+                else {
+                    //Stack must have changed or filter did, we can remove it from the list of slots to track
+                    remainderSlotsToVoid.remove(slot);
+                }
+            }
+        }
+
+
+        setCooldown(world, INSERTING_COOLDOWN);
+
+        if(shouldCompactShards()) {
+            tryCompacting(storageInventory, ModItems.SOUL_DUST);
+        }
+
+
+
+        if(shouldHoldShards()) {
             return;
         }
 
@@ -186,9 +219,7 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
         } else {
             DiffuserUpgradeHelper.tryAndAddShardsToPouch(storageWrapper, (Player)entity);
         }
-
-        setCooldown(world, COOLDOWN);
-        slotsToVoid.clear();
+        setCooldown(world, SHARD_POUCH_COOLDOWN);
     }
 
 
@@ -210,10 +241,9 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
     @Override
     public @NotNull ItemStack onOverflow(@NotNull ItemStack stack) {
         if(filterLogic.matchesFilter(stack) && shouldVoidOverflow) {
-            int count = stack.getCount();
             int soulValue = DiffuserUpgradeHelper.getDiffuserValue(stack);
             if(soulValue != 0) {
-                return new ItemStack(ModItems.SOUL_DUST, count * soulValue);
+                return insertDiffusedDust(storageWrapper.getInventoryHandler(), stack, false);
             }
         }
         return stack;
@@ -229,24 +259,6 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
 
     public boolean isVoidAnythingEnabled() {
         return upgradeItem.isVoidAnythingEnabled();
-    }
-
-
-    @Override
-    public int getSlotLimit() {
-        return Integer.MAX_VALUE;
-    }
-
-    private void compactDust(IItemHandlerSimpleInserter inventoryHandler, int slot) {
-        ItemStack slotStack = inventoryHandler.getStackInSlot(slot);
-
-        if(slotStack.isEmpty()) {
-            return;
-        }
-
-        Item item = slotStack.getItem();
-
-        tryCompacting(inventoryHandler, item);
     }
 
 
@@ -281,6 +293,94 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
                     && InventoryHelper.insertIntoInventory(remainingItems, clonedHandler, false).isEmpty();
         }
         return InventoryHelper.insertIntoInventory(result, inventoryHandler, true).isEmpty();
+    }
+
+
+    private boolean canFitResultingDust(IItemHandler inventoryHandler, ItemStack diffuseStack, ItemStack dustStack, ItemStack shardStack) {
+        if (!diffuseStack.isEmpty()) {
+            IItemHandler clonedHandler = InventoryHelper.cloneInventory(inventoryHandler);
+            if(InventoryHelper.insertIntoInventory(dustStack, clonedHandler, false).isEmpty() && InventoryHelper.insertIntoInventory(shardStack, clonedHandler, false).isEmpty()) {
+                return true;
+            }
+
+        }
+
+        return InventoryHelper.insertIntoInventory(dustStack, inventoryHandler, true).isEmpty() && InventoryHelper.insertIntoInventory(shardStack, inventoryHandler, true).isEmpty();
+    }
+
+    public ItemStack insertDiffusedDust(InventoryHandler inventoryHandler, int slot, ItemStack stackToDiffuse, boolean simulate, boolean shouldExtractDiffuseStack) {
+        if(stackToDiffuse.isEmpty() || stackToDiffuse.getItem().equals(ModItems.SOUL_DUST) || stackToDiffuse.getItem().equals(ModItems.SOUL_SHARD)) {
+            return stackToDiffuse;
+        }
+
+        int soulValue = DiffuserUpgradeHelper.getDiffuserValue(stackToDiffuse);
+        int itemCount = stackToDiffuse.getCount();
+        int totalValue = soulValue * itemCount;
+        ItemStack dustStack;
+        ItemStack shardStack = ItemStack.EMPTY;
+        boolean inserted = false;
+
+        if(soulValue == 0) {
+            return stackToDiffuse;
+        }
+
+        if(shouldCompactShards()) {
+            Pair<Integer, Integer> dustShardPair;
+            dustShardPair = getDustAndShardPair(totalValue);
+            dustStack = new ItemStack(ModItems.SOUL_DUST, dustShardPair.getRight());
+            shardStack = new ItemStack(ModItems.SOUL_SHARD, dustShardPair.getLeft());
+        }
+        else {
+            dustStack = new ItemStack(ModItems.SOUL_DUST, totalValue);
+        }
+
+        if(canFitResultingDust(inventoryHandler, stackToDiffuse, dustStack, shardStack)) {
+            inventoryHandler.insertItem(dustStack, simulate);
+            if(!shardStack.isEmpty()) {
+                inventoryHandler.insertItem(shardStack, simulate);
+            }
+            inserted = true;
+        }
+
+        if(inserted) {
+            if(shouldExtractDiffuseStack) {
+                inventoryHandler.extractItem(slot, itemCount, simulate);
+            }
+            return ItemStack.EMPTY;
+        }
+        else {
+            if(shouldCompactShards()) {
+                Pair<Integer, Integer> shardDustPair = getDustAndShardPair(soulValue);
+                dustStack = new ItemStack(ModItems.SOUL_DUST, shardDustPair.getRight());
+                shardStack = new ItemStack(ModItems.SOUL_SHARD, shardDustPair.getLeft());
+            }
+            else {
+                dustStack = new ItemStack(ModItems.SOUL_DUST, soulValue);
+                shardStack = ItemStack.EMPTY;
+            }
+
+            if(canFitResultingDust(inventoryHandler, stackToDiffuse, dustStack, shardStack)) {
+                inventoryHandler.insertItem(shardStack, simulate);
+                inventoryHandler.insertItem(dustStack, simulate);
+
+                if(shouldExtractDiffuseStack) {
+                    inventoryHandler.extractItem(slot, 1, simulate);
+                    remainderSlotsToVoid.add(slot);
+                    return ItemStack.EMPTY;
+                }
+            }
+            return stackToDiffuse;
+        }
+    }
+
+    public ItemStack insertDiffusedDust(InventoryHandler inventoryHandler, ItemStack stackToDiffuse, boolean simulate) {
+        return insertDiffusedDust(inventoryHandler, -1, stackToDiffuse, simulate, false);
+    }
+
+    public static Pair<Integer, Integer> getDustAndShardPair(int totalValue) {
+        int shardValue = totalValue / 9;
+        int dustValue = totalValue % 9;
+        return Pair.of(shardValue, dustValue);
     }
 
 

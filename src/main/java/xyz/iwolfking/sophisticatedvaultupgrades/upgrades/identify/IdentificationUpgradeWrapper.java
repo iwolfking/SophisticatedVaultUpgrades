@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<IdentificationUpgradeWrapper, IdentificationUpgradeItem>
-        implements IPickupResponseUpgrade, ISlotChangeResponseUpgrade, ITickableUpgrade, ISlotLimitUpgrade {
+        implements IPickupResponseUpgrade, ISlotChangeResponseUpgrade, ITickableUpgrade {
 
     private final Set<Integer> slotsToIdentify = new HashSet<>();
     private final ItemStack upgradeStack;
@@ -86,10 +86,6 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
     }
 
 
-    @Override
-    public int getSlotLimit() {
-        return Integer.MAX_VALUE;
-    }
 
     @Override
     public void onSlotChange(IItemHandler inventoryHandler, int slot) {

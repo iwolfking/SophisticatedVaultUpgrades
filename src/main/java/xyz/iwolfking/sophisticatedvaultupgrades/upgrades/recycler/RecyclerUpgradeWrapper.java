@@ -31,14 +31,14 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWrapper, RecyclerUpgradeItem>
-        implements IInsertResponseUpgrade, IFilteredUpgrade, ISlotChangeResponseUpgrade, ITickableUpgrade, IOverflowResponseUpgrade, ISlotLimitUpgrade {
+        implements IInsertResponseUpgrade, IFilteredUpgrade, ISlotChangeResponseUpgrade, ITickableUpgrade, IOverflowResponseUpgrade {
     private final FilterLogic filterLogic;
     private final Set<Integer> slotsToVoid = new HashSet<>();
 
     public RecyclerUpgradeWrapper(IStorageWrapper storageWrapper, ItemStack upgrade, Consumer<ItemStack> upgradeSaveHandler) {
         super(storageWrapper, upgrade, upgradeSaveHandler);
         filterLogic = new FilterLogic(upgrade, upgradeSaveHandler, upgradeItem.getFilterSlotCount());
-        filterLogic.setAllowByDefault(true);
+        //filterLogic.setAllowByDefault(true);
     }
 
     @Override
@@ -128,11 +128,6 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
     }
 
 
-
-    @Override
-    public int getSlotLimit() {
-        return Integer.MAX_VALUE;
-    }
 
 
 }

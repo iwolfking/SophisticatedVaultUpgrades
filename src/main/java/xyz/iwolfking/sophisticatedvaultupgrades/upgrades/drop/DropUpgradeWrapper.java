@@ -29,7 +29,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class DropUpgradeWrapper extends UpgradeWrapperBase<DropUpgradeWrapper, DropUpgradeItem>
-        implements IInsertResponseUpgrade, IFilteredUpgrade, ISlotChangeResponseUpgrade, ITickableUpgrade, IOverflowResponseUpgrade, ISlotLimitUpgrade {
+        implements IInsertResponseUpgrade, IFilteredUpgrade, ISlotChangeResponseUpgrade, ITickableUpgrade, IOverflowResponseUpgrade {
     private final FilterLogic filterLogic;
     private final Set<Integer> slotsToVoid = new HashSet<>();
     private boolean shouldVoidOverflow;
@@ -38,7 +38,7 @@ public class DropUpgradeWrapper extends UpgradeWrapperBase<DropUpgradeWrapper, D
     public DropUpgradeWrapper(IStorageWrapper storageWrapper, ItemStack upgrade, Consumer<ItemStack> upgradeSaveHandler) {
         super(storageWrapper, upgrade, upgradeSaveHandler);
         filterLogic = new FilterLogic(upgrade, upgradeSaveHandler, upgradeItem.getFilterSlotCount());
-        filterLogic.setAllowByDefault(true);
+        //filterLogic.setAllowByDefault();
         setShouldVoidOverflowDefaultOrLoadFromNbt(false);
     }
 
@@ -136,12 +136,6 @@ public class DropUpgradeWrapper extends UpgradeWrapperBase<DropUpgradeWrapper, D
 
     public boolean isVoidAnythingEnabled() {
         return upgradeItem.isVoidAnythingEnabled();
-    }
-
-
-    @Override
-    public int getSlotLimit() {
-        return Integer.MAX_VALUE;
     }
 
 
