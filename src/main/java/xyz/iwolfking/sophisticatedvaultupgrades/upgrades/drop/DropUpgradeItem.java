@@ -7,13 +7,13 @@ import net.p3pp3rf1y.sophisticatedcore.upgrades.voiding.VoidUpgradeConfig;
 import org.jetbrains.annotations.NotNull;
 
 public class DropUpgradeItem extends UpgradeItemBase<DropUpgradeWrapper> {
-    private final VoidUpgradeConfig voidUpgradeConfig;
+    private final DropUpgradeConfig dropUpgradeConfig;
     public static final UpgradeType<DropUpgradeWrapper> TYPE = new UpgradeType<>(DropUpgradeWrapper::new);
 
 
-    public DropUpgradeItem(CreativeModeTab itemGroup, VoidUpgradeConfig voidUpgradeConfig) {
+    public DropUpgradeItem(CreativeModeTab itemGroup, DropUpgradeConfig dropUpgradeConfig) {
         super(itemGroup);
-        this.voidUpgradeConfig = voidUpgradeConfig;
+        this.dropUpgradeConfig = dropUpgradeConfig;
     }
 
     @Override
@@ -23,10 +23,10 @@ public class DropUpgradeItem extends UpgradeItemBase<DropUpgradeWrapper> {
 
 
     public int getFilterSlotCount() {
-        return voidUpgradeConfig.filterSlots.get();
+        return dropUpgradeConfig.filterSlots.get();
     }
 
     public boolean isVoidAnythingEnabled() {
-        return voidUpgradeConfig.voidAnythingEnabled.get();
+        return dropUpgradeConfig.voidAnythingEnabled.get();
     }
 }

@@ -7,9 +7,9 @@ public class DiffuserUpgradeConfig extends FilteredUpgradeConfigBase {
     public final ForgeConfigSpec.BooleanValue voidAnythingEnabled;
 
 
-    protected DiffuserUpgradeConfig(ForgeConfigSpec.Builder builder, String name, String path, int defaultFilterSlots, int defaultSlotsInRow) {
+    public DiffuserUpgradeConfig(ForgeConfigSpec.Builder builder, String name, String path, int defaultFilterSlots, int defaultSlotsInRow) {
         super(builder, name, path, defaultFilterSlots, defaultSlotsInRow);
-        voidAnythingEnabled = builder.comment("Determines whether diffuser upgrade allows diffusing anything or it only has overflow option").define("voidAnythingEnabled", true);
+        voidAnythingEnabled = builder.comment("Determines whether diffuser upgrade allows diffusing anything or it only has overflow option").define("diffuseAnythingEnabled", true);
 
         builder.pop();
     }

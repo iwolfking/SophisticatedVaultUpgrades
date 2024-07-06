@@ -51,22 +51,22 @@ public class ModItemsSophisticatedBP {
             () -> new ActivationUpgradeItem(SophisticatedBackpacks.ITEM_GROUP));
 
     public static final RegistryObject<DiffuserUpgradeItem> DIFFUSER_UPGRADE = ITEMS.register("diffuser_upgrade",
-            () -> new DiffuserUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, Config.SERVER.voidUpgrade));
+            () -> new DiffuserUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.diffuserUpgrade));
 
     public static final RegistryObject<DiffuserUpgradeItem> ADVANCED_DIFFUSER_UPGRADE = ITEMS.register("diffuser_upgrade_advanced",
-            () -> new DiffuserUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.advancedVoidUpgrade));
+            () -> new DiffuserUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedDiffuserUpgradeConfig));
 
     public static final RegistryObject<RecyclerUpgradeItem> RECYCLER_UPGRADE = ITEMS.register("recycler_upgrade",
-            () -> new RecyclerUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, Config.SERVER.voidUpgrade));
+            () -> new RecyclerUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.recyclerUpgradeConfig));
 
     public static final RegistryObject<RecyclerUpgradeItem> ADVANCED_RECYCLER_UPGRADE = ITEMS.register("recycler_upgrade_advanced",
-            () -> new RecyclerUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, Config.SERVER.advancedVoidUpgrade));
+            () -> new RecyclerUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedRecyclerUpgradeConfig));
 
     public static final RegistryObject<DropUpgradeItem> DROP_UPGRADE = ITEMS.register("drop_upgrade",
-            () -> new DropUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, Config.SERVER.voidUpgrade));
+            () -> new DropUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.dropUpgradeConfig));
 
     public static final RegistryObject<DropUpgradeItem> ADVANCED_DROP_UPGRADE = ITEMS.register("drop_upgrade_advanced",
-            () -> new DropUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, Config.SERVER.advancedVoidUpgrade));
+            () -> new DropUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedDropUpgradeConfig));
 
     public static void registerHandlers(IEventBus modBus) {
         ITEMS.register(modBus);

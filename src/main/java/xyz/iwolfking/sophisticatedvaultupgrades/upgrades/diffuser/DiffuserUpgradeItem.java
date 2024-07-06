@@ -7,13 +7,13 @@ import net.p3pp3rf1y.sophisticatedcore.upgrades.voiding.VoidUpgradeConfig;
 import org.jetbrains.annotations.NotNull;
 
 public class DiffuserUpgradeItem extends UpgradeItemBase<DiffuserUpgradeWrapper> {
-    private final VoidUpgradeConfig voidUpgradeConfig;
+    private final DiffuserUpgradeConfig diffuserUpgradeConfig;
     public static final UpgradeType<DiffuserUpgradeWrapper> TYPE = new UpgradeType<>(DiffuserUpgradeWrapper::new);
 
 
-    public DiffuserUpgradeItem(CreativeModeTab itemGroup, VoidUpgradeConfig voidUpgradeConfig) {
+    public DiffuserUpgradeItem(CreativeModeTab itemGroup, DiffuserUpgradeConfig diffuserUpgradeConfig) {
         super(itemGroup);
-        this.voidUpgradeConfig = voidUpgradeConfig;
+        this.diffuserUpgradeConfig = diffuserUpgradeConfig;
     }
 
     @Override
@@ -23,10 +23,10 @@ public class DiffuserUpgradeItem extends UpgradeItemBase<DiffuserUpgradeWrapper>
 
 
     public int getFilterSlotCount() {
-        return voidUpgradeConfig.filterSlots.get();
+        return diffuserUpgradeConfig.filterSlots.get();
     }
 
     public boolean isVoidAnythingEnabled() {
-        return voidUpgradeConfig.voidAnythingEnabled.get();
+        return diffuserUpgradeConfig.voidAnythingEnabled.get();
     }
 }

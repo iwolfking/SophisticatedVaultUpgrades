@@ -7,13 +7,13 @@ import net.p3pp3rf1y.sophisticatedcore.upgrades.voiding.VoidUpgradeConfig;
 import org.jetbrains.annotations.NotNull;
 
 public class RecyclerUpgradeItem extends UpgradeItemBase<RecyclerUpgradeWrapper> {
-    private final VoidUpgradeConfig voidUpgradeConfig;
+    private final RecyclerUpgradeConfig recyclerUpgradeConfig;
     public static final UpgradeType<RecyclerUpgradeWrapper> TYPE = new UpgradeType<>(RecyclerUpgradeWrapper::new);
 
 
-    public RecyclerUpgradeItem(CreativeModeTab itemGroup, VoidUpgradeConfig voidUpgradeConfig) {
+    public RecyclerUpgradeItem(CreativeModeTab itemGroup, RecyclerUpgradeConfig recyclerUpgradeConfig) {
         super(itemGroup);
-        this.voidUpgradeConfig = voidUpgradeConfig;
+        this.recyclerUpgradeConfig = recyclerUpgradeConfig;
     }
 
     @Override
@@ -23,7 +23,7 @@ public class RecyclerUpgradeItem extends UpgradeItemBase<RecyclerUpgradeWrapper>
 
 
     public int getFilterSlotCount() {
-        return voidUpgradeConfig.filterSlots.get();
+        return recyclerUpgradeConfig.filterSlots.get();
     }
 
 }
