@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWrapper, DiffuserUpgradeItem>
         implements IInsertResponseUpgrade, IFilteredUpgrade, ISlotChangeResponseUpgrade, ITickableUpgrade, IOverflowResponseUpgrade {
@@ -47,7 +48,7 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
 
     @Override
     public @NotNull ItemStack onBeforeInsert(@NotNull IItemHandlerSimpleInserter inventoryHandler, int slot, @NotNull ItemStack stack, boolean simulate) {
-        if(stack.getItem().equals(ModItems.SOUL_DUST) || stack.getItem().equals(ModItems.SOUL_SHARD)) {
+        if(stack.getItem().equals(ModItems.SOUL_DUST) || stack.getItem().equals(ModItems.SOUL_SHARD) || !hasSlotSpace()) {
             return stack;
         }
 
@@ -386,4 +387,14 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
         return Pair.of(shardValue, dustValue);
     }
 
+    private boolean hasSlotSpace() {
+        InventoryHandler handler = storageWrapper.getInventoryHandler();
+        Predicate<ItemStack> hasItemPredicate = Predicate.not(Predicate.isEqual(ItemStack.EMPTY));
+        if(!handler.hasEmptySlots()) {
+            return false;
+        }
+        else {
+            return handler.getSlots() - InventoryHelper.getItemSlots(handler, hasItemPredicate).size() > 2;
+        }
+    }
 }

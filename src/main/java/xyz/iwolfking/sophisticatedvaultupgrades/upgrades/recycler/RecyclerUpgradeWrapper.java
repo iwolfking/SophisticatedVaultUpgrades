@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWrapper, RecyclerUpgradeItem>
         implements IInsertResponseUpgrade, IFilteredUpgrade, ISlotChangeResponseUpgrade, ITickableUpgrade, IOverflowResponseUpgrade {
@@ -43,7 +44,7 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
 
     @Override
     public @NotNull ItemStack onBeforeInsert(@NotNull IItemHandlerSimpleInserter inventoryHandler, int slot, @NotNull ItemStack stack, boolean simulate) {
-        if(!(stack.getItem() instanceof RecyclableItem)) {
+        if(!(stack.getItem() instanceof RecyclableItem) || !hasSlotSpace()) {
             return stack;
         }
         List<ItemStack> outputs = RecyclerUpgradeHelper.getVaultRecyclerOutputs(stack);
@@ -131,6 +132,15 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
     }
 
 
-
+    private boolean hasSlotSpace() {
+        InventoryHandler handler = storageWrapper.getInventoryHandler();
+        Predicate<ItemStack> hasItemPredicate = Predicate.not(Predicate.isEqual(ItemStack.EMPTY));
+        if(!handler.hasEmptySlots()) {
+            return false;
+        }
+        else {
+            return handler.getSlots() - InventoryHelper.getItemSlots(handler, hasItemPredicate).size() >= 3;
+        }
+    }
 
 }
