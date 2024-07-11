@@ -2,6 +2,7 @@ package xyz.iwolfking.sophisticatedvaultupgrades.events;
 
 import iskallia.vault.recipe.InitDollRecipe;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -20,6 +21,9 @@ import java.util.concurrent.atomic.AtomicReference;
 public class InteractEvents {
 
     public static void activateInteractUpgrades(PlayerInteractEvent.RightClickBlock event) {
+        if(event.getHand() != InteractionHand.MAIN_HAND) {
+            return;
+        }
         Player player = event.getPlayer();
         Level level = event.getWorld();
         BlockPos blockPos = event.getHitVec().getBlockPos();
@@ -29,6 +33,7 @@ public class InteractEvents {
                     return true;
                 }).orElse(false), false
         );
+
     }
 
 }

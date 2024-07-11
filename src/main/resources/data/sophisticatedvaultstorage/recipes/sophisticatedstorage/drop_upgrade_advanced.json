@@ -10,7 +10,7 @@
       "item": "minecraft:redstone_block"
     },
     "U": {
-      "item": "sophisticatedstorage:upgrade_base"
+      "item": "sophisticatedstorage:drop_upgrade"
     },
     "L": {
       "item": "the_vault:chromatic_steel_ingot"
