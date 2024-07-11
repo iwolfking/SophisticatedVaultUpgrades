@@ -1,5 +1,6 @@
 package xyz.iwolfking.sophisticatedvaultupgrades.upgrades.activation;
 
+import iskallia.vault.block.ScavengerAltarBlock;
 import iskallia.vault.block.TreasureDoorBlock;
 import iskallia.vault.core.event.CommonEvents;
 import net.minecraft.core.BlockPos;
@@ -46,6 +47,9 @@ public class ActivationUpgradeWrapper extends UpgradeWrapperBase<ActivationUpgra
 
         if(blockState.getBlock() instanceof TreasureDoorBlock door) {
             return ActivationUpgradeLogic.tryOpenTreasureDoor(player, world, blockState, blockPos, door, storageWrapper);
+        }
+        if(blockState.getBlock() instanceof ScavengerAltarBlock altar) {
+            return ActivationUpgradeLogic.tryAddingToScavAltar(player, world, blockPos, altar, storageWrapper);
         }
         return false;
     }

@@ -1,6 +1,9 @@
 package xyz.iwolfking.sophisticatedvaultupgrades.upgrades.recycler;
 
+import iskallia.vault.block.entity.SpiritExtractorTileEntity;
 import iskallia.vault.config.VaultRecyclerConfig;
+import iskallia.vault.gear.VaultGearState;
+import iskallia.vault.gear.item.IdentifiableItem;
 import iskallia.vault.init.ModItems;
 import iskallia.vault.item.gear.RecyclableItem;
 import net.minecraft.core.BlockPos;
@@ -46,6 +49,11 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
     public @NotNull ItemStack onBeforeInsert(@NotNull IItemHandlerSimpleInserter inventoryHandler, int slot, @NotNull ItemStack stack, boolean simulate) {
         if(!(stack.getItem() instanceof RecyclableItem) || !hasSlotSpace()) {
             return stack;
+        }
+        if(!shouldScrapUnidentified() && stack.getItem() instanceof IdentifiableItem identifiableItem) {
+            if(identifiableItem.getState(stack).equals(VaultGearState.UNIDENTIFIED)) {
+                return stack;
+            }
         }
         List<ItemStack> outputs = RecyclerUpgradeHelper.getVaultRecyclerOutputs(stack);
 
@@ -104,6 +112,11 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
             if(!stackMatchesFilter(stack)) {
                 continue;
             }
+            if(!shouldScrapUnidentified() && stack.getItem() instanceof IdentifiableItem identifiableItem) {
+                if(identifiableItem.getState(stack).equals(VaultGearState.UNIDENTIFIED)) {
+                    continue;
+                }
+            }
             List<ItemStack> outputs = RecyclerUpgradeHelper.getVaultRecyclerOutputs(stack);
             for(ItemStack recycleStack : outputs) {
                 storageInventory.insertItem(recycleStack, false);
@@ -142,5 +155,15 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
             return handler.getSlots() - InventoryHelper.getItemSlots(handler, hasItemPredicate).size() >= 3;
         }
     }
+
+    public void setScrapUnidentified(boolean shouldScrapUnidentified) {
+        NBTHelper.setBoolean(upgrade, "shouldScrapUnidentified", shouldScrapUnidentified);
+        save();
+    }
+
+    public boolean shouldScrapUnidentified() {
+        return NBTHelper.getBoolean(upgrade, "shouldScrapUnidentified").orElse(false);
+    }
+
 
 }

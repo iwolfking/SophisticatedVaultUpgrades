@@ -1,8 +1,10 @@
 {
   "item.sophisticatedstorage.identification_upgrade": "Identification Upgrade",
   "item.sophisticatedbackpacks.identification_upgrade": "Identification Upgrade",
+  "item.sophisticatedbackpacks.identification_upgrade_advanced": "Advanced Identification Upgrade",
   "item.sophisticatedbackpacks.activator_upgrade": "Activator Upgrade",
-  "item.sophisticatedbackpacks.identification_upgrade.tooltip": "Automatically identifies unidentified items that enter the backpack. Shift-right click to set owner.",
+  "item.sophisticatedbackpacks.identification_upgrade.tooltip": "Automatically identifies unidentified items that enter the backpack. Shift-right click to set owner. Note: identified gear will increase your spirit recovery cost. Make sure it is BEFORE any Pickup Upgrade you have!",
+  "item.sophisticatedbackpacks.identification_upgrade_advanced.tooltip": "Automatically identifies unidentified items that enter the backpack, can toggle whether it works in vaults. Shift-right click to set owner. Make sure it is BEFORE any Pickup Upgrade you have!",
   "item.sophisticatedstorage.identification_upgrade.tooltip": "Automatically identifies unidentified items that enter the storage. Shift-right click to set owner.",
   "item.sophisticatedbackpacks.activator_upgrade.tooltip": "Uses Treasure Keys from backpack inventory to open Treasure Doors when right-clicking them.",
   "item.sophisticatedbackpacks.diffuser_upgrade": "Soul Diffuser Upgrade",

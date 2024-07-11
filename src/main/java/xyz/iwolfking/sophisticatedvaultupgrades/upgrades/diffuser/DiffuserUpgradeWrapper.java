@@ -38,8 +38,6 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
     private static final int INSERTING_COOLDOWN = 10;
     private static final int SHARD_POUCH_COOLDOWN = 20;
 
-    private static final RecipeHelper.CompactingResult SHARD_COMPACTING_RECIPE = RecipeHelper.getCompactingResult(ModItems.SOUL_DUST, 3, 3);
-
     public DiffuserUpgradeWrapper(IStorageWrapper storageWrapper, ItemStack upgrade, Consumer<ItemStack> upgradeSaveHandler) {
         super(storageWrapper, upgrade, upgradeSaveHandler);
         filterLogic = new FilterLogic(upgrade, upgradeSaveHandler, upgradeItem.getFilterSlotCount());

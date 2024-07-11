@@ -10,6 +10,7 @@ import net.p3pp3rf1y.sophisticatedcore.util.NBTHelper;
 
 public class RecyclerUpgradeContainer extends UpgradeContainerBase<RecyclerUpgradeWrapper, RecyclerUpgradeContainer> {
     private static final String DATA_SHOULD_WORKD_IN_GUI = "shouldWorkdInGUI";
+    private static final String DATA_SHOULD_SCRAP_UNIDENTIFIED = "shouldScrapUnidentified";
     private final FilterLogicContainer<FilterLogic> filterLogicContainer;
 
     public RecyclerUpgradeContainer(Player player, int containerId, RecyclerUpgradeWrapper wrapper, UpgradeContainerType<RecyclerUpgradeWrapper, RecyclerUpgradeContainer> type) {
@@ -21,6 +22,9 @@ public class RecyclerUpgradeContainer extends UpgradeContainerBase<RecyclerUpgra
     public void handleMessage(CompoundTag data) {
         if (data.contains(DATA_SHOULD_WORKD_IN_GUI)) {
             setShouldWorkdInGUI(data.getBoolean(DATA_SHOULD_WORKD_IN_GUI));
+        }
+        if (data.contains(DATA_SHOULD_SCRAP_UNIDENTIFIED)) {
+            setShouldScrapUnidentified(data.getBoolean(DATA_SHOULD_SCRAP_UNIDENTIFIED));
         }
         filterLogicContainer.handleMessage(data);
     }
@@ -36,5 +40,14 @@ public class RecyclerUpgradeContainer extends UpgradeContainerBase<RecyclerUpgra
 
     public Boolean shouldWorkInGUI() {
         return upgradeWrapper.worksInGui();
+    }
+
+    public void setShouldScrapUnidentified(boolean shouldScrapUnidentified) {
+        upgradeWrapper.setScrapUnidentified(shouldScrapUnidentified);
+        sendDataToServer(() -> NBTHelper.putBoolean(new CompoundTag(), DATA_SHOULD_SCRAP_UNIDENTIFIED, shouldScrapUnidentified));
+    }
+
+    public Boolean shouldScrapUnidentified() {
+        return upgradeWrapper.shouldScrapUnidentified();
     }
 }

@@ -14,6 +14,7 @@ import net.p3pp3rf1y.sophisticatedcore.inventory.ItemStackKey;
 import org.slf4j.Logger;
 import xyz.iwolfking.sophisticatedvaultupgrades.config.Config;
 import xyz.iwolfking.sophisticatedvaultupgrades.events.InteractEvents;
+import xyz.iwolfking.sophisticatedvaultupgrades.events.VaultEvents;
 import xyz.iwolfking.sophisticatedvaultupgrades.init.ModItemsSophisticatedBP;
 import xyz.iwolfking.sophisticatedvaultupgrades.init.ModItemsSophisticatedST;
 
@@ -35,6 +36,7 @@ public class SophisticatedVaultUpgrades {
 
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         MinecraftForge.EVENT_BUS.addListener(InteractEvents::activateInteractUpgrades);
+        MinecraftForge.EVENT_BUS.addListener(VaultEvents::onDimensionChange);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);

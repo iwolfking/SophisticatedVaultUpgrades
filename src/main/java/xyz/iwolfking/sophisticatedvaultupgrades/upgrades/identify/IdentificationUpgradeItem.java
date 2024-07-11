@@ -20,14 +20,18 @@ import net.minecraft.world.level.Level;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.UpgradeItemBase;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.UpgradeType;
 import org.jetbrains.annotations.Nullable;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.recycler.RecyclerUpgradeConfig;
 
 import java.util.*;
 
 
 public class IdentificationUpgradeItem extends UpgradeItemBase<IdentificationUpgradeWrapper> {
+
+    private final IdentificationUpgradeConfig identificationUpgradeConfig;
     public static final UpgradeType<IdentificationUpgradeWrapper> TYPE = new UpgradeType<>(IdentificationUpgradeWrapper::new);
-    public IdentificationUpgradeItem(CreativeModeTab itemGroup) {
+    public IdentificationUpgradeItem(CreativeModeTab itemGroup, IdentificationUpgradeConfig identificationUpgradeConfig) {
         super(itemGroup);
+        this.identificationUpgradeConfig = identificationUpgradeConfig;
     }
 
     @Override
@@ -81,5 +85,8 @@ public class IdentificationUpgradeItem extends UpgradeItemBase<IdentificationUpg
         stack.setTag(compound);
     }
 
+    public int getFilterSlotCount() {
+        return identificationUpgradeConfig.filterSlots.get();
+    }
 
 }

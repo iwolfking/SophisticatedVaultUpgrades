@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XIX",
+    "LUL",
+    "XVX"
+  ],
+  "key": {
+    "I": {
+      "item": "the_vault:perfect_benitoite"
+    },
+    "U": {
+      "item": "sophisticatedbackpacks:identification_upgrade"
+    },
+    "L": {
+      "item": "the_vault:perfect_larimar"
+    },
+    "V": {
+      "item": "the_vault:vault_diamond"
+    },
+    "X": {
+      "item": "the_vault:chromatic_steel_ingot"
+    }
+  },
+  "result": {
+    "item": "sophisticatedbackpacks:identification_upgrade_advanced"
+  }
+}

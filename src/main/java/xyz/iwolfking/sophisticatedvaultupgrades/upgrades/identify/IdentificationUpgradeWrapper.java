@@ -3,8 +3,10 @@ package xyz.iwolfking.sophisticatedvaultupgrades.upgrades.identify;
 import iskallia.vault.gear.VaultGearState;
 import iskallia.vault.gear.item.IdentifiableItem;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.players.PlayerList;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -14,21 +16,30 @@ import net.p3pp3rf1y.sophisticatedcore.api.ISlotChangeResponseUpgrade;
 import net.p3pp3rf1y.sophisticatedcore.api.IStorageWrapper;
 import net.p3pp3rf1y.sophisticatedcore.inventory.InventoryHandler;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.*;
+import net.p3pp3rf1y.sophisticatedcore.util.InventoryHelper;
+import net.p3pp3rf1y.sophisticatedcore.util.NBTHelper;
 import org.jetbrains.annotations.NotNull;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.IDimensionChangeResponseUpgrade;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
 public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<IdentificationUpgradeWrapper, IdentificationUpgradeItem>
-        implements IPickupResponseUpgrade, ISlotChangeResponseUpgrade, ITickableUpgrade {
+        implements IPickupResponseUpgrade, ISlotChangeResponseUpgrade, ITickableUpgrade, IDimensionChangeResponseUpgrade {
 
     private final Set<Integer> slotsToIdentify = new HashSet<>();
     private final ItemStack upgradeStack;
 
+    private final FilterLogic filterLogic;
+    private final Map<Integer, Integer> SLOT_HASHMAP = new HashMap<>();
+
     public IdentificationUpgradeWrapper(IStorageWrapper storageWrapper, ItemStack upgrade, Consumer<ItemStack> upgradeSaveHandler) {
         super(storageWrapper, upgrade, upgradeSaveHandler);
         this.upgradeStack = upgrade;
+        this.filterLogic = new FilterLogic(upgrade, upgradeSaveHandler, upgradeItem.getFilterSlotCount());
     }
 
 
@@ -36,7 +47,10 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
     //Handles identifying items when it is picked up directly (outside of gui)
     @Override
     public @NotNull ItemStack pickup(@NotNull Level level, @NotNull ItemStack itemStack, boolean simulate) {
-        if(!simulate) {
+        if(!shouldWorkInVault() && isInVault(level)) {
+            return itemStack;
+        }
+        if(!simulate && matchesFilter(itemStack)) {
             tryIdentifyItem(itemStack, level);
         }
         return itemStack;
@@ -49,29 +63,16 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
         if (slotsToIdentify.isEmpty()) {
             return;
         }
+        if(!shouldWorkInVault() && isInVault(world)) {
+            slotsToIdentify.clear();
+            return;
+        }
 
         InventoryHandler storageInventory = storageWrapper.getInventoryHandler();
         for (int slot : slotsToIdentify) {
             ItemStack stack = storageInventory.getStackInSlot(slot);
-            if(stack.getItem() instanceof IdentifiableItem identifiableItem) {
-                if(!identifiableItem.getState(stack).equals(VaultGearState.UNIDENTIFIED)) {
-                    continue;
-                }
-            }
-            if(entity instanceof Player player && getOwner(world) == null) {
-                ItemStack identifiedStack = tryIdentifyItem(stack, world, player);
-                storageInventory.setStackInSlot(slot, ItemStack.EMPTY);
-                storageInventory.insertItem(identifiedStack, false);
-            }
-            else {
-                if(getOwner(world) != null) {
-                    ItemStack identifiedStack = tryIdentifyItem(stack, world);
-                    storageInventory.setStackInSlot(slot, ItemStack.EMPTY);
-                    storageInventory.insertItem(identifiedStack, false);
-                }
-                else {
-                    //There is no player to use for identifying gear, so we do nothing
-                }
+            if(matchesFilter(stack, slot)) {
+                tryIdentifyItem(stack, slot, world, entity, storageInventory);
             }
         }
 
@@ -79,8 +80,18 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
     }
 
     public boolean matchesFilter(ItemStack stack) {
-        if(stack.getItem() instanceof IdentifiableItem gear) {
-            return gear.getState(stack).equals(VaultGearState.UNIDENTIFIED);
+        return matchesFilter(stack, -1);
+    }
+
+    public boolean matchesFilter(ItemStack stack, int slot) {
+        if(SLOT_HASHMAP.containsKey(slot) && SLOT_HASHMAP.get(slot).equals(stack.hashCode())) {
+            return false;
+        }
+
+        if(stack.getItem() instanceof IdentifiableItem gear && filterLogic.matchesFilter(stack)) {
+            boolean isUnidentified = gear.getState(stack).equals(VaultGearState.UNIDENTIFIED);
+            SLOT_HASHMAP.put(slot, stack.hashCode());
+            return isUnidentified;
         }
         return false;
     }
@@ -89,7 +100,6 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
 
     @Override
     public void onSlotChange(IItemHandler inventoryHandler, int slot) {
-
         ItemStack slotStack = inventoryHandler.getStackInSlot(slot);
         if (this.matchesFilter(slotStack)) {
             slotsToIdentify.add(slot);
@@ -123,6 +133,21 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
     }
 
 
+    private ItemStack tryIdentifyItem(ItemStack stack, int slot, Level world, Entity entity, InventoryHandler storageInventory) {
+        if(entity instanceof Player player && getOwner(world) == null) {
+            ItemStack identifiedStack = tryIdentifyItem(stack, world, player);
+            storageInventory.setStackInSlot(slot, ItemStack.EMPTY);
+            storageInventory.insertItem(identifiedStack, false);
+        }
+        else {
+            if(getOwner(world) != null) {
+                ItemStack identifiedStack = tryIdentifyItem(stack, world);
+                storageInventory.setStackInSlot(slot, ItemStack.EMPTY);
+                storageInventory.insertItem(identifiedStack, false);
+            }
+        }
+        return stack.copy();
+    }
 
     private ItemStack tryIdentifyItem(ItemStack stack, Level level, Player player) {
         if(player != null) {
@@ -140,12 +165,42 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
     private ItemStack tryIdentifyItem(ItemStack stack, Level level) {
         Player player = getOwner(level);
         if(player != null) {
-            if(stack.getItem() instanceof IdentifiableItem identifiableItem) {
-                identifiableItem.instantIdentify(player, stack);
-                return stack.copy();
-            }
+            return tryIdentifyItem(stack, level, player);
         }
         return stack.copy();
     }
 
+    @Override
+    public void onDimensionChange(ResourceKey<Level> from, ResourceKey<Level> to, Player player) {
+        if(shouldWorkInVault()) {
+            return;
+        }
+        if(from.location().getNamespace().equals("the_vault")) {
+            InventoryHelper.iterate(storageWrapper.getInventoryHandler(), (slot, stack) -> {
+                if(stack.getItem() instanceof IdentifiableItem identifiableItem) {
+                    if(identifiableItem.getState(stack).equals(VaultGearState.UNIDENTIFIED)) {
+                        tryIdentifyItem(stack, player.getLevel(), player);
+                    }
+                }
+            });
+        }
+    }
+
+    public void setShouldWorkInVault(boolean shouldWorkInVault) {
+        NBTHelper.setBoolean(upgrade, "shouldWorkInVault", shouldWorkInVault);
+        save();
+    }
+
+    public boolean shouldWorkInVault() {
+        return NBTHelper.getBoolean(upgrade, "shouldWorkInVault").orElse(true);
+    }
+
+
+    public boolean isInVault(Level level) {
+        return level.dimension().location().getNamespace().equals("the_vault");
+    }
+
+    public @NotNull FilterLogic getFilterLogic() {
+        return filterLogic;
+    }
 }

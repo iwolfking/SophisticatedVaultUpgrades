@@ -17,8 +17,8 @@ import net.p3pp3rf1y.sophisticatedcore.client.gui.UpgradeGuiManager;
 import net.p3pp3rf1y.sophisticatedcore.client.gui.utils.Position;
 import net.p3pp3rf1y.sophisticatedcore.common.gui.UpgradeContainerRegistry;
 import net.p3pp3rf1y.sophisticatedcore.common.gui.UpgradeContainerType;
-import net.p3pp3rf1y.sophisticatedstorage.Config;
 import net.p3pp3rf1y.sophisticatedstorage.SophisticatedStorage;
+import xyz.iwolfking.sophisticatedvaultupgrades.config.Config;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.diffuser.DiffuserUpgradeContainer;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.diffuser.DiffuserUpgradeItem;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.diffuser.DiffuserUpgradeTab;
@@ -27,7 +27,10 @@ import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.drop.DropUpgradeContain
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.drop.DropUpgradeItem;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.drop.DropUpgradeTab;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.drop.DropUpgradeWrapper;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.identify.IdentificationUpgradeContainer;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.identify.IdentificationUpgradeItem;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.identify.IdentificationUpgradeTab;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.identify.IdentificationUpgradeWrapper;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.recycler.RecyclerUpgradeContainer;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.recycler.RecyclerUpgradeItem;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.recycler.RecyclerUpgradeTab;
@@ -43,6 +46,7 @@ public class ModItemsSophisticatedST {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, "sophisticatedstorage");
 
     static RegistryObject<DiffuserUpgradeItem> DIFFUSER_UPGRADE;
+    static RegistryObject<IdentificationUpgradeItem> IDENTIFICATION_UPGRADE;
     static RegistryObject<DiffuserUpgradeItem> ADVANCED_DIFFUSER_UPGRADE;
     static RegistryObject<RecyclerUpgradeItem> RECYCLER_UPGRADE;
     static RegistryObject<RecyclerUpgradeItem> ADVANCED_RECYCLER_UPGRADE;
@@ -50,8 +54,8 @@ public class ModItemsSophisticatedST {
     static RegistryObject<DropUpgradeItem> ADVANCED_DROP_UPGRADE;
 
     public static void registerHandlers(IEventBus modBus) {
-        RegistryObject<IdentificationUpgradeItem> IDENTIFICATION_UPGRADE = ITEMS.register("identification_upgrade",
-                () -> new IdentificationUpgradeItem(SophisticatedStorage.CREATIVE_TAB));
+        IDENTIFICATION_UPGRADE = ITEMS.register("identification_upgrade",
+                () -> new IdentificationUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.identificationUpgradeConfig));
         DIFFUSER_UPGRADE = ITEMS.register("diffuser_upgrade",
                 () -> new DiffuserUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.diffuserUpgrade));
 
@@ -78,25 +82,29 @@ public class ModItemsSophisticatedST {
         UpgradeContainerType<RecyclerUpgradeWrapper, RecyclerUpgradeContainer> ADVANCED_RECYCLER_TYPE = new UpgradeContainerType<>(RecyclerUpgradeContainer::new);
         UpgradeContainerType<DropUpgradeWrapper, DropUpgradeContainer> DROP_TYPE = new UpgradeContainerType<>(DropUpgradeContainer::new);
         UpgradeContainerType<DropUpgradeWrapper, DropUpgradeContainer> ADVANCED_DROP_TYPE = new UpgradeContainerType<>(DropUpgradeContainer::new);
+        UpgradeContainerType<IdentificationUpgradeWrapper, IdentificationUpgradeContainer> IDENTIFICATION_TYPE = new UpgradeContainerType<>(IdentificationUpgradeContainer::new);
         UpgradeContainerRegistry.register(DIFFUSER_UPGRADE.getId(), DIFFUSER_TYPE);
         UpgradeContainerRegistry.register(ADVANCED_DIFFUSER_UPGRADE.getId(), ADVANCED_DIFFUSER_TYPE);
         UpgradeContainerRegistry.register(RECYCLER_UPGRADE.getId(), RECYCLER_TYPE);
         UpgradeContainerRegistry.register(ADVANCED_RECYCLER_UPGRADE.getId(), ADVANCED_RECYCLER_TYPE);
         UpgradeContainerRegistry.register(DROP_UPGRADE.getId(), DROP_TYPE);
         UpgradeContainerRegistry.register(ADVANCED_DROP_UPGRADE.getId(), DROP_TYPE);
+        UpgradeContainerRegistry.register(IDENTIFICATION_UPGRADE.getId(), IDENTIFICATION_TYPE);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             UpgradeGuiManager.registerTab(DIFFUSER_TYPE, (DiffuserUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->
-                    new DiffuserUpgradeTab.Basic(uc, p, s, net.p3pp3rf1y.sophisticatedstorage.Config.SERVER.voidUpgrade.slotsInRow.get()));
+                    new DiffuserUpgradeTab.Basic(uc, p, s, Config.SERVER.diffuserUpgrade.slotsInRow.get()));
             UpgradeGuiManager.registerTab(ADVANCED_DIFFUSER_TYPE, (DiffuserUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->
-                    new DiffuserUpgradeTab.Advanced(uc, p, s, net.p3pp3rf1y.sophisticatedstorage.Config.SERVER.advancedVoidUpgrade.slotsInRow.get()));
+                    new DiffuserUpgradeTab.Advanced(uc, p, s, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedDiffuserUpgradeConfig.slotsInRow.get()));
             UpgradeGuiManager.registerTab(RECYCLER_TYPE, (RecyclerUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->
-                    new RecyclerUpgradeTab.Basic(uc, p, s, net.p3pp3rf1y.sophisticatedstorage.Config.SERVER.voidUpgrade.slotsInRow.get()));
+                    new RecyclerUpgradeTab.Basic(uc, p, s, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.recyclerUpgradeConfig.slotsInRow.get()));
             UpgradeGuiManager.registerTab(ADVANCED_RECYCLER_TYPE, (RecyclerUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->
-                    new RecyclerUpgradeTab.Advanced(uc, p, s, Config.SERVER.advancedVoidUpgrade.slotsInRow.get()));
+                    new RecyclerUpgradeTab.Advanced(uc, p, s, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedRecyclerUpgradeConfig.slotsInRow.get()));
             UpgradeGuiManager.registerTab(DROP_TYPE, (DropUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->
-                    new DropUpgradeTab.Basic(uc, p, s, Config.SERVER.voidUpgrade.slotsInRow.get()));
+                    new DropUpgradeTab.Basic(uc, p, s, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.dropUpgradeConfig.slotsInRow.get()));
             UpgradeGuiManager.registerTab(ADVANCED_DROP_TYPE, (DropUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->
-                    new DropUpgradeTab.Advanced(uc, p, s, Config.SERVER.advancedVoidUpgrade.slotsInRow.get()));
+                    new DropUpgradeTab.Advanced(uc, p, s, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedDropUpgradeConfig.slotsInRow.get()));
+            UpgradeGuiManager.registerTab(IDENTIFICATION_TYPE, (IdentificationUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->
+                    new IdentificationUpgradeTab.Advanced(uc, p, s, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.identificationUpgradeConfig.slotsInRow.get()));
         });
     }
 }

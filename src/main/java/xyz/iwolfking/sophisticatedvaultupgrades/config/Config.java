@@ -21,6 +21,7 @@ import net.p3pp3rf1y.sophisticatedcore.upgrades.xppump.XpPumpUpgradeConfig;
 import org.apache.commons.lang3.tuple.Pair;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.diffuser.DiffuserUpgradeConfig;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.drop.DropUpgradeConfig;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.identify.IdentificationUpgradeConfig;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.recycler.RecyclerUpgradeConfig;
 
 import java.util.*;
@@ -50,6 +51,8 @@ public class Config {
         public final RecyclerUpgradeConfig advancedRecyclerUpgradeConfig;
         public final DropUpgradeConfig dropUpgradeConfig;
         public final DropUpgradeConfig advancedDropUpgradeConfig;
+        public final IdentificationUpgradeConfig advancedIdentificationUpgradeConfig;
+        public final IdentificationUpgradeConfig identificationUpgradeConfig;
 
 
         Server(ForgeConfigSpec.Builder builder) {
@@ -60,6 +63,8 @@ public class Config {
             advancedRecyclerUpgradeConfig = new RecyclerUpgradeConfig(builder, "Advanced Recycler Upgrade", "advancedRecyclerUpgrade", 16, 4);
             dropUpgradeConfig = new DropUpgradeConfig(builder, "Drop Upgrade", "dropUpgrade", 9, 3);
             advancedDropUpgradeConfig = new DropUpgradeConfig(builder, "Advanced Drop Upgrade", "advancedDropUpgrade", 16, 4);
+            identificationUpgradeConfig = new IdentificationUpgradeConfig(builder, "Identification Upgrade", "IdentificationUpgrade", 9, 4);
+            advancedIdentificationUpgradeConfig = new IdentificationUpgradeConfig(builder, "Advanced Identification Upgrade", "advancedIdentificationUpgrade", 16, 4);
             builder.pop();
         }
     }
