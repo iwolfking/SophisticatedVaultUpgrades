@@ -19,10 +19,6 @@ import xyz.iwolfking.sophisticatedvaultupgrades.util.SVUInventoryHelper;
 public class VaultEvents {
     public static void onDimensionChange(PlayerEvent.PlayerChangedDimensionEvent event) {
         Player player = event.getPlayer();
-        System.out.println("Called dimension change event, here is some details...");
-        System.out.println(event.getFrom().location());
-        System.out.println(event.getTo().location());
-        System.out.println(event.getPlayer());
         PlayerInventoryProvider.get().runOnBackpacks(player, (backpack, inventoryHandlerName, identifier, slot) -> backpack.getCapability(CapabilityBackpackWrapper.getCapabilityInstance())
                 .map(wrapper -> {
                     SVUInventoryHelper.runDimensionChangeOnDimensionChangeUpgrades(event.getFrom(), event.getTo(), player, wrapper.getUpgradeHandler());

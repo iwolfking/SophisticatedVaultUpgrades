@@ -32,5 +32,7 @@
   "item.sophisticatedstorage.diffuser_upgrade_advanced.tooltip": "Automatically diffuses items with soul value into soul dust when they match the filter. Can automatically compact to Soul Shards and send them to your Shard Pouch.",
   "item.sophisticatedstorage.recycler_upgrade_advanced.tooltip": "Recycles recyclable items like a Vault Recycler would.",
   "gui.sophisticatedbackpacks.upgrades.diffuser.tooltip": "Diffuser Settings",
-  "gui.sophisticatedbackpacks.upgrades.recycler.tooltip": "Recycler Settings"
+  "gui.sophisticatedbackpacks.upgrades.recycler.tooltip": "Recycler Settings",
+  "block.sophisticatedvaultupgrades.debagnetizer": "Debagnetizer",
+  "item.sophisticatedvaultupgrades.debagnetizer": "Debagnetizer"
 }
