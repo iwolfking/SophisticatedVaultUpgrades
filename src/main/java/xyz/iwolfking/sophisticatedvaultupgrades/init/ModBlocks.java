@@ -4,6 +4,9 @@ import com.mojang.datafixers.types.Type;
 import iskallia.vault.block.DemagnetizerBlock;
 import iskallia.vault.block.entity.DemagnetizerTileEntity;
 import iskallia.vault.init.ModItems;
+import iskallia.vault.item.crystal.CrystalData;
+import iskallia.vault.item.crystal.VaultCrystalItem;
+import iskallia.vault.item.crystal.properties.CapacityCrystalProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DoubleHighBlockItem;
@@ -14,26 +17,25 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.event.RegistryEvent;
 import xyz.iwolfking.sophisticatedvaultupgrades.SophisticatedVaultUpgrades;
-import xyz.iwolfking.sophisticatedvaultupgrades.blocks.DebagnetizerBlock;
-import xyz.iwolfking.sophisticatedvaultupgrades.blocks.tiles.DebagnetizerTileEntity;
 
 import java.util.function.Consumer;
 
 public class ModBlocks {
-    public static final DebagnetizerBlock DEBAGNETIZER_BLOCK;
+    //public static final DebagnetizerBlock DEBAGNETIZER_BLOCK;
 
-    public static final BlockEntityType<DemagnetizerTileEntity> DEBAGNETIZER_TILE;
+    //public static final BlockEntityType<DemagnetizerTileEntity> DEBAGNETIZER_TILE;
 
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
-        registerBlock(event, DEBAGNETIZER_BLOCK, SophisticatedVaultUpgrades.loc("debagnetizer"));
+        //registerBlock(event, DEBAGNETIZER_BLOCK, SophisticatedVaultUpgrades.loc("debagnetizer"));
     }
 
     public static void registerTileEntities(RegistryEvent.Register<BlockEntityType<?>> event) {
-        registerTileEntity(event, DEBAGNETIZER_TILE, SophisticatedVaultUpgrades.loc("debagnetizer_tile"));
+        //registerTileEntity(event, DEBAGNETIZER_TILE, SophisticatedVaultUpgrades.loc("debagnetizer_tile"));
+
     }
 
     public static void registerBlockItems(RegistryEvent.Register<Item> event) {
-        registerBlockItem(event, DEBAGNETIZER_BLOCK);
+        //registerBlockItem(event, DEBAGNETIZER_BLOCK);
     }
 
     private static void registerBlock(RegistryEvent.Register<Block> event, Block block, ResourceLocation id) {
@@ -84,7 +86,7 @@ public class ModBlocks {
     }
 
     static {
-        DEBAGNETIZER_BLOCK = new DebagnetizerBlock();
-        DEBAGNETIZER_TILE = BlockEntityType.Builder.of(DemagnetizerTileEntity::new, new Block[]{DEBAGNETIZER_BLOCK}).build((Type)null);
+        //DEBAGNETIZER_BLOCK = new DebagnetizerBlock();
+        //DEBAGNETIZER_TILE = BlockEntityType.Builder.of(DemagnetizerTileEntity::new, new Block[]{DEBAGNETIZER_BLOCK}).build((Type)null);
     }
 }

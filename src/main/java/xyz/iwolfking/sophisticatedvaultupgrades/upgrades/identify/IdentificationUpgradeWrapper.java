@@ -14,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
 import net.p3pp3rf1y.sophisticatedcore.api.ISlotChangeResponseUpgrade;
 import net.p3pp3rf1y.sophisticatedcore.api.IStorageWrapper;
+import net.p3pp3rf1y.sophisticatedcore.inventory.IItemHandlerSimpleInserter;
 import net.p3pp3rf1y.sophisticatedcore.inventory.InventoryHandler;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.*;
 import net.p3pp3rf1y.sophisticatedcore.util.InventoryHelper;
@@ -28,19 +29,25 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<IdentificationUpgradeWrapper, IdentificationUpgradeItem>
-        implements IPickupResponseUpgrade, ISlotChangeResponseUpgrade, ITickableUpgrade, IDimensionChangeResponseUpgrade {
+        implements IPickupResponseUpgrade, ISlotChangeResponseUpgrade, ITickableUpgrade, IDimensionChangeResponseUpgrade, IInsertResponseUpgrade {
 
     private final Set<Integer> slotsToIdentify = new HashSet<>();
+
+    boolean shouldRunIdentify = true;
     private final ItemStack upgradeStack;
 
     private final FilterLogic filterLogic;
     private final Map<Integer, Integer> SLOT_HASHMAP = new HashMap<>();
+
+    private static final int IDENTIFICATION_COOLDOWN = 20;
 
     public IdentificationUpgradeWrapper(IStorageWrapper storageWrapper, ItemStack upgrade, Consumer<ItemStack> upgradeSaveHandler) {
         super(storageWrapper, upgrade, upgradeSaveHandler);
         this.upgradeStack = upgrade;
         this.filterLogic = new FilterLogic(upgrade, upgradeSaveHandler, upgradeItem.getFilterSlotCount());
     }
+
+
 
 
 
@@ -60,23 +67,22 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
     //For handling identifying gear that is inserted through an interface.
     @Override
     public void tick(LivingEntity entity, Level world, BlockPos pos) {
-        if (slotsToIdentify.isEmpty()) {
+        if (!shouldRunIdentify || isInCooldown(world)) {
             return;
         }
         if(!shouldWorkInVault() && isInVault(world)) {
-            slotsToIdentify.clear();
             return;
         }
 
         InventoryHandler storageInventory = storageWrapper.getInventoryHandler();
-        for (int slot : slotsToIdentify) {
+        for (int slot = 0; slot < storageWrapper.getInventoryHandler().getSlots(); slot++) {
             ItemStack stack = storageInventory.getStackInSlot(slot);
             if(matchesFilter(stack, slot)) {
                 tryIdentifyItem(stack, slot, world, entity, storageInventory);
             }
         }
-
-        slotsToIdentify.clear();
+        setCooldown(world, IDENTIFICATION_COOLDOWN);
+        shouldRunIdentify = false;
     }
 
     public boolean matchesFilter(ItemStack stack) {
@@ -100,10 +106,7 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
 
     @Override
     public void onSlotChange(IItemHandler inventoryHandler, int slot) {
-        ItemStack slotStack = inventoryHandler.getStackInSlot(slot);
-        if (this.matchesFilter(slotStack)) {
-            slotsToIdentify.add(slot);
-        }
+        shouldRunIdentify = true;
     }
 
     public boolean hasOwner() {
@@ -202,5 +205,15 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
 
     public @NotNull FilterLogic getFilterLogic() {
         return filterLogic;
+    }
+
+    @Override
+    public @NotNull ItemStack onBeforeInsert(@NotNull IItemHandlerSimpleInserter iItemHandlerSimpleInserter, int i, @NotNull ItemStack itemStack, boolean b) {
+        return itemStack;
+    }
+
+    @Override
+    public void onAfterInsert(IItemHandlerSimpleInserter iItemHandlerSimpleInserter, int i) {
+        shouldRunIdentify = true;
     }
 }

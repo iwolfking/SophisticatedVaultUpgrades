@@ -5,7 +5,6 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "SophisticatedVaultUpgrades.refmap.json",
   "mixins": [
-    "MixinSBCommonEventHandler"
   ],
   "client": [
   ],

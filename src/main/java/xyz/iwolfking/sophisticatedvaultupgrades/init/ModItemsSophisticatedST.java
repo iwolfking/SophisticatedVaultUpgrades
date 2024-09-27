@@ -88,7 +88,7 @@ public class ModItemsSophisticatedST {
         UpgradeContainerRegistry.register(RECYCLER_UPGRADE.getId(), RECYCLER_TYPE);
         UpgradeContainerRegistry.register(ADVANCED_RECYCLER_UPGRADE.getId(), ADVANCED_RECYCLER_TYPE);
         UpgradeContainerRegistry.register(DROP_UPGRADE.getId(), DROP_TYPE);
-        UpgradeContainerRegistry.register(ADVANCED_DROP_UPGRADE.getId(), DROP_TYPE);
+        UpgradeContainerRegistry.register(ADVANCED_DROP_UPGRADE.getId(), ADVANCED_DROP_TYPE);
         UpgradeContainerRegistry.register(IDENTIFICATION_UPGRADE.getId(), IDENTIFICATION_TYPE);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             UpgradeGuiManager.registerTab(DIFFUSER_TYPE, (DiffuserUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->

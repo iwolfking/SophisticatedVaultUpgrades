@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "III",
+    "ICI",
+    "VVV"
+  ],
+  "key": {
+    "I": {
+      "item": "the_vault:chromatic_iron_ingot"
+    },
+    "C": {
+      "item": "minecraft:copper_block"
+    },
+    "V": {
+      "item": "the_vault:velvet_block"
+    }
+  },
+  "result": {
+    "item": "sophisticatedvaultupgrades:debagnetizer"
+  }
+}

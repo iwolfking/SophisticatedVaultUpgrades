@@ -4,12 +4,14 @@ import iskallia.vault.block.ScavengerAltarBlock;
 import iskallia.vault.block.TreasureDoorBlock;
 import iskallia.vault.block.entity.ScavengerAltarTileEntity;
 import iskallia.vault.core.event.CommonEvents;
+import iskallia.vault.core.event.common.BlockUseEvent;
 import iskallia.vault.core.vault.Vault;
 import iskallia.vault.core.vault.objective.Objective;
 import iskallia.vault.core.vault.objective.ScavengerObjective;
 import iskallia.vault.core.vault.objective.scavenger.ScavengerGoal;
 import iskallia.vault.core.vault.player.Listener;
 import iskallia.vault.core.vault.player.Listeners;
+import iskallia.vault.core.world.data.tile.PartialTile;
 import iskallia.vault.world.data.ServerVaults;
 import it.unimi.dsi.fastutil.Hash;
 import net.minecraft.core.BlockPos;
@@ -40,6 +42,7 @@ public class ActivationUpgradeLogic {
                 if (itemStackKey.getStack().getItem() == blockState.getValue(TreasureDoorBlock.TYPE).getKey()) {
                     itemsToRemove.add(itemStackKey);
                     door.setOpen(player, world, blockState, blockPos, true);
+                    CommonEvents.BLOCK_USE_MERGED.invoke(world, player, InteractionHand.MAIN_HAND, null, PartialTile.of(blockState), PartialTile.of(world.getBlockState(blockPos)));
                     CommonEvents.TREASURE_ROOM_OPEN.invoke(world, player, blockPos);
                 }
             });
