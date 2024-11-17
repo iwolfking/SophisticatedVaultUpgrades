@@ -26,6 +26,7 @@ import net.p3pp3rf1y.sophisticatedcore.util.RecipeHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.diffuser.DiffuserUpgradeHelper;
+import xyz.iwolfking.vhapi.api.data.api.CustomRecyclerOutputs;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -47,7 +48,7 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
 
     @Override
     public @NotNull ItemStack onBeforeInsert(@NotNull IItemHandlerSimpleInserter inventoryHandler, int slot, @NotNull ItemStack stack, boolean simulate) {
-        if(!(stack.getItem() instanceof RecyclableItem) || !hasSlotSpace()) {
+        if(!(stack.getItem() instanceof RecyclableItem || CustomRecyclerOutputs.CUSTOM_OUTPUTS.containsKey(stack.getItem().getRegistryName())) || !hasSlotSpace()) {
             return stack;
         }
         if(!shouldScrapUnidentified() && stack.getItem() instanceof IdentifiableItem identifiableItem) {
@@ -96,7 +97,7 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
 
         ItemStack slotStack = inventoryHandler.getStackInSlot(slot);
 
-        if (filterLogic.matchesFilter(slotStack) && slotStack.getItem() instanceof RecyclableItem) {
+        if (filterLogic.matchesFilter(slotStack) && slotStack.getItem() instanceof RecyclableItem || CustomRecyclerOutputs.CUSTOM_OUTPUTS.containsKey(slotStack.getItem().getRegistryName())) {
             slotsToVoid.add(slot);
         }
     }

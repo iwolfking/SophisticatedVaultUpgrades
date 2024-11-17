@@ -23,15 +23,23 @@ import net.minecraftforge.network.PacketDistributor;
 import net.p3pp3rf1y.sophisticatedcore.api.IStorageWrapper;
 import net.p3pp3rf1y.sophisticatedcore.util.InventoryHelper;
 import top.theillusivec4.curios.api.CuriosApi;
+import xyz.iwolfking.vhapi.api.data.api.CustomRecyclerOutputs;
 
 import java.util.List;
 
 public class RecyclerUpgradeHelper {
 
     public static List<ItemStack> getVaultRecyclerOutputs(ItemStack stack) {
-        if(stack.getItem() instanceof RecyclableItem recyclableItem) {
+        if(stack.getItem() instanceof RecyclableItem || CustomRecyclerOutputs.CUSTOM_OUTPUTS.containsKey(stack.getItem().getRegistryName())) {
             ItemStack input = stack.copy();
-            VaultRecyclerConfig.RecyclerOutput output = recyclableItem.getOutput(stack);
+            VaultRecyclerConfig.RecyclerOutput output;
+            if(stack.getItem() instanceof RecyclableItem recyclableItem) {
+                output = recyclableItem.getOutput(stack);
+            }
+            else {
+                output = CustomRecyclerOutputs.CUSTOM_OUTPUTS.get(stack.getItem().getRegistryName());
+            }
+
             float additionalChance = 0.0F;
             if (input.getItem() instanceof VaultGearItem) {
                 VaultGearRarity rarity = VaultGearData.read(input).getRarity();

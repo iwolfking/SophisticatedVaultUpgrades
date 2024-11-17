@@ -17,6 +17,10 @@ import net.p3pp3rf1y.sophisticatedcore.client.gui.UpgradeGuiManager;
 import net.p3pp3rf1y.sophisticatedcore.client.gui.utils.Position;
 import net.p3pp3rf1y.sophisticatedcore.common.gui.UpgradeContainerRegistry;
 import net.p3pp3rf1y.sophisticatedcore.common.gui.UpgradeContainerType;
+import net.p3pp3rf1y.sophisticatedcore.upgrades.tank.TankUpgradeContainer;
+import net.p3pp3rf1y.sophisticatedcore.upgrades.tank.TankUpgradeItem;
+import net.p3pp3rf1y.sophisticatedcore.upgrades.tank.TankUpgradeTab;
+import net.p3pp3rf1y.sophisticatedcore.upgrades.tank.TankUpgradeWrapper;
 import net.p3pp3rf1y.sophisticatedstorage.SophisticatedStorage;
 import xyz.iwolfking.sophisticatedvaultupgrades.config.Config;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.diffuser.DiffuserUpgradeContainer;
@@ -53,6 +57,7 @@ public class ModItemsSophisticatedST {
     static RegistryObject<DropUpgradeItem> DROP_UPGRADE;
     static RegistryObject<DropUpgradeItem> ADVANCED_DROP_UPGRADE;
 
+
     public static void registerHandlers(IEventBus modBus) {
         IDENTIFICATION_UPGRADE = ITEMS.register("identification_upgrade",
                 () -> new IdentificationUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.identificationUpgradeConfig));
@@ -64,12 +69,11 @@ public class ModItemsSophisticatedST {
         RECYCLER_UPGRADE = ITEMS.register("recycler_upgrade",
                 () -> new RecyclerUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.recyclerUpgradeConfig));
         ADVANCED_RECYCLER_UPGRADE = ITEMS.register("recycler_upgrade_advanced",
-                () -> new RecyclerUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedRecyclerUpgradeConfig));
+                () -> new RecyclerUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedRecyclerUpgradeConfig));
         DROP_UPGRADE = ITEMS.register("drop_upgrade",
                 () -> new DropUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.dropUpgradeConfig));
         ADVANCED_DROP_UPGRADE = ITEMS.register("drop_upgrade_advanced",
-                () -> new DropUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedDropUpgradeConfig));
-
+                () -> new DropUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedDropUpgradeConfig));
         ITEMS.register(modBus);
         modBus.addGenericListener(MenuType.class, ModItemsSophisticatedST::registerContainers);
     }
