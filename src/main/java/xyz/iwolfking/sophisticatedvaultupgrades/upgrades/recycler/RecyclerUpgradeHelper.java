@@ -26,15 +26,20 @@ import top.theillusivec4.curios.api.CuriosApi;
 import xyz.iwolfking.vhapi.api.data.api.CustomRecyclerOutputs;
 
 import java.util.List;
+import java.util.Random;
 
 public class RecyclerUpgradeHelper {
+
+    private static final Random random = new Random();
 
     public static List<ItemStack> getVaultRecyclerOutputs(ItemStack stack) {
         if(stack.getItem() instanceof RecyclableItem || CustomRecyclerOutputs.CUSTOM_OUTPUTS.containsKey(stack.getItem().getRegistryName())) {
             ItemStack input = stack.copy();
             VaultRecyclerConfig.RecyclerOutput output;
+            float resultPercentage = 1.0F;
             if(stack.getItem() instanceof RecyclableItem recyclableItem) {
                 output = recyclableItem.getOutput(stack);
+                resultPercentage = recyclableItem.getResultPercentage(stack);
             }
             else {
                 output = CustomRecyclerOutputs.CUSTOM_OUTPUTS.get(stack.getItem().getRegistryName());
@@ -44,6 +49,12 @@ public class RecyclerUpgradeHelper {
             if (input.getItem() instanceof VaultGearItem) {
                 VaultGearRarity rarity = VaultGearData.read(input).getRarity();
                 additionalChance = ModConfigs.VAULT_RECYCLER.getAdditionalOutputRarityChance(rarity);
+            }
+
+            if(resultPercentage < 1.0F) {
+                if(resultPercentage < random.nextFloat()) {
+                    return List.of();
+                }
             }
 
             return List.of(output.generateMainOutput(additionalChance), output.generateExtraOutput1(additionalChance), output.generateExtraOutput2(additionalChance));

@@ -1,16 +1,19 @@
 package xyz.iwolfking.sophisticatedvaultupgrades.upgrades.identify;
 
+import com.mojang.authlib.GameProfile;
 import iskallia.vault.gear.VaultGearState;
 import iskallia.vault.gear.item.IdentifiableItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.items.IItemHandler;
 import net.p3pp3rf1y.sophisticatedcore.api.ISlotChangeResponseUpgrade;
 import net.p3pp3rf1y.sophisticatedcore.api.IStorageWrapper;
@@ -125,8 +128,16 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
                 return null;
             }
             try {
-                PlayerList list = server.getPlayerList();
-                return list.getPlayer(upgradeItem.getOwnerID(upgradeStack));
+                //PlayerList list = server.getPlayerList();
+                if(upgradeItem.getOwnerID(upgradeStack) != null) {
+                    GameProfile fakeProfile = new GameProfile(upgradeItem.getOwnerID(upgradeStack), upgradeItem.getOwnerName(upgradeStack));
+                    return new FakePlayer((ServerLevel) world, fakeProfile);
+                }
+                else {
+                    return null;
+                }
+
+                //return list.getPlayer(upgradeItem.getOwnerID(upgradeStack));
             }
             catch(Exception e) {
                 e.printStackTrace();
