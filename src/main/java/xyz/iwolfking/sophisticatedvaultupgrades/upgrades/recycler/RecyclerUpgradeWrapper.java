@@ -43,12 +43,11 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
     public RecyclerUpgradeWrapper(IStorageWrapper storageWrapper, ItemStack upgrade, Consumer<ItemStack> upgradeSaveHandler) {
         super(storageWrapper, upgrade, upgradeSaveHandler);
         filterLogic = new FilterLogic(upgrade, upgradeSaveHandler, upgradeItem.getFilterSlotCount());
-        //filterLogic.setAllowByDefault(true);
     }
 
     @Override
     public @NotNull ItemStack onBeforeInsert(@NotNull IItemHandlerSimpleInserter inventoryHandler, int slot, @NotNull ItemStack stack, boolean simulate) {
-        if(!(stack.getItem() instanceof RecyclableItem || CustomRecyclerOutputs.CUSTOM_OUTPUTS.containsKey(stack.getItem().getRegistryName())) || !hasSlotSpace()) {
+        if(!(stack.getItem() instanceof RecyclableItem || !CustomRecyclerOutputs.CUSTOM_OUTPUTS.containsKey(stack.getItem().getRegistryName())) || !hasSlotSpace()) {
             return stack;
         }
         if(!shouldScrapUnidentified() && stack.getItem() instanceof IdentifiableItem identifiableItem) {
@@ -56,6 +55,11 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
                 return stack;
             }
         }
+
+        if(stack.getItem() instanceof RecyclableItem recyclableItem && !recyclableItem.isValidInput(stack)) {
+            return stack;
+        }
+
         List<ItemStack> outputs = RecyclerUpgradeHelper.getVaultRecyclerOutputs(stack);
 
         if(filterLogic.matchesFilter(stack) && !outputs.isEmpty()) {
@@ -98,6 +102,10 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
         ItemStack slotStack = inventoryHandler.getStackInSlot(slot);
 
         if (filterLogic.matchesFilter(slotStack) && slotStack.getItem() instanceof RecyclableItem || CustomRecyclerOutputs.CUSTOM_OUTPUTS.containsKey(slotStack.getItem().getRegistryName())) {
+            if(slotStack.getItem() instanceof RecyclableItem recyclableItem && !recyclableItem.isValidInput(slotStack)) {
+                return;
+            }
+
             slotsToVoid.add(slot);
         }
     }
@@ -142,6 +150,10 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
 
     @Override
     public boolean stackMatchesFilter(@NotNull ItemStack stack) {
+        if(stack.getItem() instanceof RecyclableItem recyclableItem && !recyclableItem.isValidInput(stack)) {
+            return false;
+        }
+
         return filterLogic.matchesFilter(stack);
     }
 
