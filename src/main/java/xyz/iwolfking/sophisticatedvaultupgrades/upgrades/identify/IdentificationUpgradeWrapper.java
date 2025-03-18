@@ -3,6 +3,7 @@ package xyz.iwolfking.sophisticatedvaultupgrades.upgrades.identify;
 import com.mojang.authlib.GameProfile;
 import iskallia.vault.gear.VaultGearState;
 import iskallia.vault.gear.item.IdentifiableItem;
+import iskallia.vault.item.JewelPouchItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -97,7 +98,7 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
             return false;
         }
 
-        if(stack.getItem() instanceof IdentifiableItem gear && filterLogic.matchesFilter(stack)) {
+        if(stack.getItem() instanceof IdentifiableItem gear && filterLogic.matchesFilter(stack) && !(stack.getItem() instanceof JewelPouchItem)) {
             boolean isUnidentified = gear.getState(stack).equals(VaultGearState.UNIDENTIFIED);
             SLOT_HASHMAP.put(slot, stack.hashCode());
             return isUnidentified;

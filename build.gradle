@@ -152,7 +152,7 @@ dependencies {
     implementation fg.deobf("curse.maven:sophisticatedcore-618298:4231285")
     implementation fg.deobf("curse.maven:sophisticatedstorage-619320:4950570")
     implementation fg.deobf("curse.maven:sophisticatedbackpacks-422301:4913629")
-    implementation fg.deobf('curse.maven:vault-hunters-official-mod-458203:5631250')
+    implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:5925633")
     implementation fg.deobf('curse.maven:curios-309927:4985315')
     implementation fg.deobf("curse.maven:vault-hunters-api-1118899:5865552")
     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
