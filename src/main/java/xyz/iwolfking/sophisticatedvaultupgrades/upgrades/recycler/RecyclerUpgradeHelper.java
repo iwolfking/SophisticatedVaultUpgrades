@@ -7,6 +7,7 @@ import iskallia.vault.gear.VaultGearRarity;
 import iskallia.vault.gear.data.VaultGearData;
 import iskallia.vault.gear.item.VaultGearItem;
 import iskallia.vault.init.ModConfigs;
+import iskallia.vault.init.ModGearAttributes;
 import iskallia.vault.init.ModItems;
 import iskallia.vault.init.ModNetwork;
 import iskallia.vault.item.ItemShardPouch;
@@ -57,7 +58,16 @@ public class RecyclerUpgradeHelper {
                 }
             }
 
-            return List.of(output.generateMainOutput(additionalChance), output.generateExtraOutput1(additionalChance), output.generateExtraOutput2(additionalChance));
+            if(stack.getItem() instanceof VaultGearItem) {
+                VaultGearData data = VaultGearData.read(input);
+                VaultGearRarity rarity = data.getRarity();
+                boolean isCrafted = data.hasAttribute(ModGearAttributes.CRAFTED_BY) || data.getFirstValue(ModGearAttributes.CRAFTED_BY).isPresent();
+                additionalChance = ModConfigs.VAULT_RECYCLER.getAdditionalOutputRarityChance(rarity);
+                return List.of(output.generateMainOutput(additionalChance), output.generateExtraOutput1(additionalChance, rarity, isCrafted), output.generateExtraOutput2(additionalChance, rarity, isCrafted));
+            }
+            else {
+                return List.of(output.generateMainOutput(additionalChance), output.generateExtraOutput1(additionalChance), output.generateExtraOutput2(additionalChance));
+            }
         }
         return List.of();
     }
