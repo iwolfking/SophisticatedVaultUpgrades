@@ -166,7 +166,7 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
 
     private ItemStack tryIdentifyItem(ItemStack stack, Level level, Player player) {
         if(player != null) {
-            if(stack.getItem() instanceof IdentifiableItem identifiableItem) {
+            if(stack.getItem() instanceof IdentifiableItem identifiableItem && stack.getCount() == 1) {
                 identifiableItem.instantIdentify(player, stack);
                 return stack.copy();
             }
