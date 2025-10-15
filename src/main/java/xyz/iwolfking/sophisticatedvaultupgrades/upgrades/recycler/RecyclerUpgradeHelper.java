@@ -65,10 +65,10 @@ public class RecyclerUpgradeHelper {
                 boolean isCrafted = data.hasAttribute(ModGearAttributes.CRAFTED_BY) || data.getFirstValue(ModGearAttributes.CRAFTED_BY).isPresent();
                 boolean isLegendary = data.get(ModGearAttributes.IS_LEGENDARY, VaultGearAttributeTypeMerger.anyTrue());
                 additionalChance = ModConfigs.VAULT_RECYCLER.getAdditionalOutputRarityChance(rarity);
-                return List.of(output.generateMainOutput(additionalChance), output.generateExtraOutput1(additionalChance, rarity, isCrafted, isLegendary), output.generateExtraOutput2(additionalChance, rarity, isCrafted, isLegendary));
+                return List.of(output.generateMainOutput(additionalChance), output.generateExtraOutput1(stack, additionalChance, rarity, isCrafted, isLegendary), output.generateExtraOutput2(stack, additionalChance, rarity, isCrafted, isLegendary));
             }
             else {
-                return List.of(output.generateMainOutput(additionalChance), output.generateExtraOutput1(additionalChance), output.generateExtraOutput2(additionalChance));
+                return List.of(output.generateMainOutput(additionalChance), output.generateExtraOutput1(stack, additionalChance), output.generateExtraOutput2(stack, additionalChance));
             }
         }
         return List.of();
