@@ -50,33 +50,33 @@ public class ModItemsSophisticatedBP {
     public static final TagKey<Item> STORAGE_UPGRADE_TAG = TagKey.create(Registry.ITEM_REGISTRY, ModItems.BACKPACK_UPGRADE_TAG_NAME);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, SophisticatedBackpacks.MOD_ID);
     public static final RegistryObject<IdentificationUpgradeItem> IDENTIFICATION_UPGRADE = ITEMS.register("identification_upgrade",
-            () -> new IdentificationUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.identificationUpgradeConfig));
+            () -> new IdentificationUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.identificationUpgradeConfig,net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.maxUpgradesPerStorage));
 
     public static final RegistryObject<IdentificationUpgradeItem> ADVANCED_IDENTIFICATION_UPGRADE = ITEMS.register("identification_upgrade_advanced",
-            () -> new IdentificationUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedIdentificationUpgradeConfig));
+            () -> new IdentificationUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedIdentificationUpgradeConfig, net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.maxUpgradesPerStorage) );
     public static final RegistryObject<ActivationUpgradeItem> ACTIVATION_UPGRADE = ITEMS.register("activator_upgrade",
-            () -> new ActivationUpgradeItem(SophisticatedBackpacks.ITEM_GROUP));
+            () -> new ActivationUpgradeItem(SophisticatedBackpacks.ITEM_GROUP,net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.maxUpgradesPerStorage));
 
     public static final RegistryObject<DiffuserUpgradeItem> DIFFUSER_UPGRADE = ITEMS.register("diffuser_upgrade",
-            () -> new DiffuserUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.diffuserUpgrade));
+            () -> new DiffuserUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.diffuserUpgrade,net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.maxUpgradesPerStorage));
 
     public static final RegistryObject<DiffuserUpgradeItem> ADVANCED_DIFFUSER_UPGRADE = ITEMS.register("diffuser_upgrade_advanced",
-            () -> new DiffuserUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedDiffuserUpgradeConfig));
+            () -> new DiffuserUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedDiffuserUpgradeConfig,net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.maxUpgradesPerStorage));
 
     public static final RegistryObject<RecyclerUpgradeItem> RECYCLER_UPGRADE = ITEMS.register("recycler_upgrade",
-            () -> new RecyclerUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.recyclerUpgradeConfig));
+            () -> new RecyclerUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.recyclerUpgradeConfig,net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.maxUpgradesPerStorage));
 
     public static final RegistryObject<RecyclerUpgradeItem> ADVANCED_RECYCLER_UPGRADE = ITEMS.register("recycler_upgrade_advanced",
-            () -> new RecyclerUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedRecyclerUpgradeConfig));
+            () -> new RecyclerUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedRecyclerUpgradeConfig,net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.maxUpgradesPerStorage));
 
     public static final RegistryObject<DropUpgradeItem> DROP_UPGRADE = ITEMS.register("drop_upgrade",
-            () -> new DropUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.dropUpgradeConfig));
+            () -> new DropUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.dropUpgradeConfig,net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.maxUpgradesPerStorage));
 
     public static final RegistryObject<DropUpgradeItem> ADVANCED_DROP_UPGRADE = ITEMS.register("drop_upgrade_advanced",
-            () -> new DropUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedDropUpgradeConfig));
+            () -> new DropUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedDropUpgradeConfig,net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.maxUpgradesPerStorage));
 
     public static final RegistryObject<OpenerUpgradeItem> OPENER_UPGRADE = ITEMS.register("opener_upgrade",
-            () -> new OpenerUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, Config.SERVER.openerUpgradeConfig));
+            () -> new OpenerUpgradeItem(SophisticatedBackpacks.ITEM_GROUP, Config.SERVER.openerUpgradeConfig,net.p3pp3rf1y.sophisticatedbackpacks.Config.SERVER.maxUpgradesPerStorage));
 
     public static void registerHandlers(IEventBus modBus) {
         ITEMS.register(modBus);

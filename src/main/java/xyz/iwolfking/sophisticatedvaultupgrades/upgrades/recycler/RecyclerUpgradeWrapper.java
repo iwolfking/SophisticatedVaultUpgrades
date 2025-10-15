@@ -94,12 +94,12 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
     }
 
     public void setShouldWorkdInGUI(boolean shouldWorkdInGUI) {
-        NBTHelper.setBoolean(upgrade, "shouldWorkInGUI", shouldWorkdInGUI);
+        NBTHelper.setBoolean(upgrade, "shouldWorkdInGUI", shouldWorkdInGUI);
         save();
     }
 
     public boolean shouldWorkInGUI() {
-        return NBTHelper.getBoolean(upgrade, "shouldWorkInGUI").orElse(false);
+        return NBTHelper.getBoolean(upgrade, "shouldWorkdInGUI").orElse(false);
     }
 
 

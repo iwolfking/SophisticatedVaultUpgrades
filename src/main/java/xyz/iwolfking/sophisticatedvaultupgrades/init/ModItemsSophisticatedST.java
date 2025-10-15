@@ -65,22 +65,22 @@ public class ModItemsSophisticatedST {
 
     public static void registerHandlers(IEventBus modBus) {
         IDENTIFICATION_UPGRADE = ITEMS.register("identification_upgrade",
-                () -> new IdentificationUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.identificationUpgradeConfig));
+                () -> new IdentificationUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.identificationUpgradeConfig,net.p3pp3rf1y.sophisticatedstorage.Config.SERVER.maxUpgradesPerStorage));
         DIFFUSER_UPGRADE = ITEMS.register("diffuser_upgrade",
-                () -> new DiffuserUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.diffuserUpgrade));
+                () -> new DiffuserUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.diffuserUpgrade,net.p3pp3rf1y.sophisticatedstorage.Config.SERVER.maxUpgradesPerStorage));
 
         ADVANCED_DIFFUSER_UPGRADE = ITEMS.register("diffuser_upgrade_advanced",
-                () -> new DiffuserUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedDiffuserUpgradeConfig));
+                () -> new DiffuserUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedDiffuserUpgradeConfig,net.p3pp3rf1y.sophisticatedstorage.Config.SERVER.maxUpgradesPerStorage));
         RECYCLER_UPGRADE = ITEMS.register("recycler_upgrade",
-                () -> new RecyclerUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.recyclerUpgradeConfig));
+                () -> new RecyclerUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.recyclerUpgradeConfig,net.p3pp3rf1y.sophisticatedstorage.Config.SERVER.maxUpgradesPerStorage));
         ADVANCED_RECYCLER_UPGRADE = ITEMS.register("recycler_upgrade_advanced",
-                () -> new RecyclerUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedRecyclerUpgradeConfig));
+                () -> new RecyclerUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedRecyclerUpgradeConfig,net.p3pp3rf1y.sophisticatedstorage.Config.SERVER.maxUpgradesPerStorage));
         DROP_UPGRADE = ITEMS.register("drop_upgrade",
-                () -> new DropUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.dropUpgradeConfig));
+                () -> new DropUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.dropUpgradeConfig,net.p3pp3rf1y.sophisticatedstorage.Config.SERVER.maxUpgradesPerStorage));
         ADVANCED_DROP_UPGRADE = ITEMS.register("drop_upgrade_advanced",
-                () -> new DropUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedDropUpgradeConfig));
+                () -> new DropUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedDropUpgradeConfig,net.p3pp3rf1y.sophisticatedstorage.Config.SERVER.maxUpgradesPerStorage));
         OPENER_UPGRADE = ITEMS.register("opener_upgrade",
-                () -> new OpenerUpgradeItem(SophisticatedStorage.CREATIVE_TAB, Config.SERVER.openerUpgradeConfig));
+                () -> new OpenerUpgradeItem(SophisticatedStorage.CREATIVE_TAB, Config.SERVER.openerUpgradeConfig,net.p3pp3rf1y.sophisticatedstorage.Config.SERVER.maxUpgradesPerStorage));
         ITEMS.register(modBus);
         modBus.addGenericListener(MenuType.class, ModItemsSophisticatedST::registerContainers);
     }

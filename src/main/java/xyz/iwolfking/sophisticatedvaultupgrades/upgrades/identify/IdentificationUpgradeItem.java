@@ -17,6 +17,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.p3pp3rf1y.sophisticatedcore.upgrades.IUpgradeCountLimitConfig;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.UpgradeItemBase;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.UpgradeType;
 import org.jetbrains.annotations.Nullable;
@@ -29,8 +30,8 @@ public class IdentificationUpgradeItem extends UpgradeItemBase<IdentificationUpg
 
     private final IdentificationUpgradeConfig identificationUpgradeConfig;
     public static final UpgradeType<IdentificationUpgradeWrapper> TYPE = new UpgradeType<>(IdentificationUpgradeWrapper::new);
-    public IdentificationUpgradeItem(CreativeModeTab itemGroup, IdentificationUpgradeConfig identificationUpgradeConfig) {
-        super(itemGroup);
+    public IdentificationUpgradeItem(CreativeModeTab itemGroup, IdentificationUpgradeConfig identificationUpgradeConfig, IUpgradeCountLimitConfig upgradeCountLimitConfig) {
+        super(itemGroup, upgradeCountLimitConfig);
         this.identificationUpgradeConfig = identificationUpgradeConfig;
     }
 

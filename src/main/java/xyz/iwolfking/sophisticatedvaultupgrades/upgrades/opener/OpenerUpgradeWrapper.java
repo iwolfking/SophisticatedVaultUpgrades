@@ -83,12 +83,12 @@ public class OpenerUpgradeWrapper extends UpgradeWrapperBase<OpenerUpgradeWrappe
     }
 
     public void setShouldWorkdInGUI(boolean shouldWorkdInGUI) {
-        NBTHelper.setBoolean(upgrade, "shouldWorkInGUI", shouldWorkdInGUI);
+        NBTHelper.setBoolean(upgrade, "shouldWorkdInGUI", shouldWorkdInGUI);
         save();
     }
 
     public boolean shouldWorkInGUI() {
-        return NBTHelper.getBoolean(upgrade, "shouldWorkInGUI").orElse(false);
+        return NBTHelper.getBoolean(upgrade, "shouldWorkdInGUI").orElse(false);
     }
 
 
@@ -117,7 +117,6 @@ public class OpenerUpgradeWrapper extends UpgradeWrapperBase<OpenerUpgradeWrappe
             ItemStack stack = storageInventory.getStackInSlot(slot);
 
             if(!stackMatchesFilter(stack)) {
-                slotsToHandle.remove(slot);
                 continue;
             }
 
@@ -180,12 +179,7 @@ public class OpenerUpgradeWrapper extends UpgradeWrapperBase<OpenerUpgradeWrappe
     private boolean hasSlotSpace(int count) {
         InventoryHandler handler = storageWrapper.getInventoryHandler();
         Predicate<ItemStack> hasItemPredicate = Predicate.not(Predicate.isEqual(ItemStack.EMPTY));
-        if(!handler.hasEmptySlots()) {
-            return false;
-        }
-        else {
-            return handler.getSlots() - InventoryHelper.getItemSlots(handler, hasItemPredicate).size() >= count;
-        }
+        return handler.getSlots() - InventoryHelper.getItemSlots(handler, hasItemPredicate).size() >= count;
     }
 
 

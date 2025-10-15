@@ -1,6 +1,7 @@
 package xyz.iwolfking.sophisticatedvaultupgrades.upgrades.drop;
 
 import net.minecraft.world.item.CreativeModeTab;
+import net.p3pp3rf1y.sophisticatedcore.upgrades.IUpgradeCountLimitConfig;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.UpgradeItemBase;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.UpgradeType;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.voiding.VoidUpgradeConfig;
@@ -11,8 +12,8 @@ public class DropUpgradeItem extends UpgradeItemBase<DropUpgradeWrapper> {
     public static final UpgradeType<DropUpgradeWrapper> TYPE = new UpgradeType<>(DropUpgradeWrapper::new);
 
 
-    public DropUpgradeItem(CreativeModeTab itemGroup, DropUpgradeConfig dropUpgradeConfig) {
-        super(itemGroup);
+    public DropUpgradeItem(CreativeModeTab itemGroup, DropUpgradeConfig dropUpgradeConfig, IUpgradeCountLimitConfig upgradeCountLimitConfig) {
+        super(itemGroup, upgradeCountLimitConfig);
         this.dropUpgradeConfig = dropUpgradeConfig;
     }
 

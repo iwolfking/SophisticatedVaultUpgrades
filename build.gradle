@@ -149,9 +149,9 @@ dependencies {
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
    // implementation fg.deobf("curse.maven:sophisticatedcore-618298:4913626")
-    implementation fg.deobf("curse.maven:sophisticatedcore-618298:4231285")
-    implementation fg.deobf("curse.maven:sophisticatedstorage-619320:4950570")
-    implementation fg.deobf("curse.maven:sophisticatedbackpacks-422301:4913629")
+    implementation fg.deobf("curse.maven:sophisticated-core-618298:5296312")
+    implementation fg.deobf("curse.maven:sophisticated-storage-619320:5809745")
+    implementation fg.deobf("curse.maven:sophisticated-backpacks-422301:5654080")
     implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:7109322")
     implementation fg.deobf("curse.maven:wolds-vaults-official-mod-958799:6999754")
     implementation fg.deobf('curse.maven:curios-309927:4985315')

@@ -3,6 +3,7 @@ package xyz.iwolfking.sophisticatedvaultupgrades.upgrades.activation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.p3pp3rf1y.sophisticatedbackpacks.SophisticatedBackpacks;
 import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.deposit.DepositUpgradeWrapper;
+import net.p3pp3rf1y.sophisticatedcore.upgrades.IUpgradeCountLimitConfig;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.UpgradeItemBase;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.UpgradeType;
 
@@ -11,8 +12,8 @@ public class ActivationUpgradeItem extends UpgradeItemBase<ActivationUpgradeWrap
 
 
 
-    public ActivationUpgradeItem(CreativeModeTab itemGroup) {
-        super(itemGroup);
+    public ActivationUpgradeItem(CreativeModeTab itemGroup, IUpgradeCountLimitConfig upgradeCountLimitConfig) {
+        super(itemGroup, upgradeCountLimitConfig);
     }
 
     @Override
