@@ -5,6 +5,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.diffuser.DiffuserUpgradeConfig;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.drop.DropUpgradeConfig;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.identify.IdentificationUpgradeConfig;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.opener.OpenerUpgradeConfig;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.recycler.RecyclerUpgradeConfig;
 
 public class Config {
@@ -34,6 +35,7 @@ public class Config {
         public final DropUpgradeConfig advancedDropUpgradeConfig;
         public final IdentificationUpgradeConfig advancedIdentificationUpgradeConfig;
         public final IdentificationUpgradeConfig identificationUpgradeConfig;
+        public final OpenerUpgradeConfig openerUpgradeConfig;
 
 
         Server(ForgeConfigSpec.Builder builder) {
@@ -47,6 +49,7 @@ public class Config {
             advancedDropUpgradeConfig = new DropUpgradeConfig(builder, "Advanced Drop Upgrade", "advancedDropUpgrade", 16, 4);
             identificationUpgradeConfig = new IdentificationUpgradeConfig(builder, "Identification Upgrade", "IdentificationUpgrade", 9, 4);
             advancedIdentificationUpgradeConfig = new IdentificationUpgradeConfig(builder, "Advanced Identification Upgrade", "advancedIdentificationUpgrade", 16, 4);
+            openerUpgradeConfig = new OpenerUpgradeConfig(builder, "Opener Upgrade", "openerUpgrade", 9, 3);
             builder.pop();
         }
     }

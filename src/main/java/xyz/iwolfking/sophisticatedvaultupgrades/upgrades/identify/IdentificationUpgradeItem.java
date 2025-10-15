@@ -35,18 +35,11 @@ public class IdentificationUpgradeItem extends UpgradeItemBase<IdentificationUpg
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(new TextComponent("Owner: " + getOwnerName(stack)));
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
-    }
-    public void onCraftedBy(ItemStack stack, Level level, Player player) {
-        setOwner(stack, player);
-    }
-
-    @Override
     public UpgradeType<IdentificationUpgradeWrapper> getType() {
         return TYPE;
     }
+
+    String NBT_OWNER = "Owner";
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
@@ -60,7 +53,16 @@ public class IdentificationUpgradeItem extends UpgradeItemBase<IdentificationUpg
         return InteractionResultHolder.pass(stack);
     }
 
-    String NBT_OWNER = "Owner";
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        tooltip.add(new TextComponent("Owner: " + getOwnerName(stack)));
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+    }
+
+
+    public void onCraftedBy(ItemStack stack, Level level, Player player) {
+        setOwner(stack, player);
+    }
 
     String getOwnerName(ItemStack stack) {
         if (!stack.hasTag() || !Objects.requireNonNull(stack.getTag()).contains(NBT_OWNER)) return null;

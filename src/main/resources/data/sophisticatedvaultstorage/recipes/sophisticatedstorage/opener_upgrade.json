@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XIX",
+    "LUL",
+    "XVX"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:piston"
+    },
+    "U": {
+      "item": "sophisticatedstorage:upgrade_base"
+    },
+    "L": {
+      "item": "the_vault:vault_diamond"
+    },
+    "V": {
+      "item": "the_vault:black_chromatic_steel_ingot"
+    },
+    "X": {
+      "item": "the_vault:magic_silk_block"
+    }
+  },
+  "result": {
+    "item": "sophisticatedstorage:opener_upgrade"
+  }
+}

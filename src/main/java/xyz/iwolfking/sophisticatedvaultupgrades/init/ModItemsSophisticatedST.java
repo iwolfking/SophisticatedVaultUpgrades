@@ -35,6 +35,10 @@ import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.identify.Identification
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.identify.IdentificationUpgradeItem;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.identify.IdentificationUpgradeTab;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.identify.IdentificationUpgradeWrapper;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.opener.OpenerUpgradeContainer;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.opener.OpenerUpgradeItem;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.opener.OpenerUpgradeTab;
+import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.opener.OpenerUpgradeWrapper;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.recycler.RecyclerUpgradeContainer;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.recycler.RecyclerUpgradeItem;
 import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.recycler.RecyclerUpgradeTab;
@@ -56,6 +60,7 @@ public class ModItemsSophisticatedST {
     static RegistryObject<RecyclerUpgradeItem> ADVANCED_RECYCLER_UPGRADE;
     static RegistryObject<DropUpgradeItem> DROP_UPGRADE;
     static RegistryObject<DropUpgradeItem> ADVANCED_DROP_UPGRADE;
+    static RegistryObject<OpenerUpgradeItem> OPENER_UPGRADE;
 
 
     public static void registerHandlers(IEventBus modBus) {
@@ -74,6 +79,8 @@ public class ModItemsSophisticatedST {
                 () -> new DropUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.dropUpgradeConfig));
         ADVANCED_DROP_UPGRADE = ITEMS.register("drop_upgrade_advanced",
                 () -> new DropUpgradeItem(SophisticatedStorage.CREATIVE_TAB, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedDropUpgradeConfig));
+        OPENER_UPGRADE = ITEMS.register("opener_upgrade",
+                () -> new OpenerUpgradeItem(SophisticatedStorage.CREATIVE_TAB, Config.SERVER.openerUpgradeConfig));
         ITEMS.register(modBus);
         modBus.addGenericListener(MenuType.class, ModItemsSophisticatedST::registerContainers);
     }
@@ -87,6 +94,7 @@ public class ModItemsSophisticatedST {
         UpgradeContainerType<DropUpgradeWrapper, DropUpgradeContainer> DROP_TYPE = new UpgradeContainerType<>(DropUpgradeContainer::new);
         UpgradeContainerType<DropUpgradeWrapper, DropUpgradeContainer> ADVANCED_DROP_TYPE = new UpgradeContainerType<>(DropUpgradeContainer::new);
         UpgradeContainerType<IdentificationUpgradeWrapper, IdentificationUpgradeContainer> IDENTIFICATION_TYPE = new UpgradeContainerType<>(IdentificationUpgradeContainer::new);
+        UpgradeContainerType<OpenerUpgradeWrapper, OpenerUpgradeContainer> OPENER_TYPE = new UpgradeContainerType<>(OpenerUpgradeContainer::new);
         UpgradeContainerRegistry.register(DIFFUSER_UPGRADE.getId(), DIFFUSER_TYPE);
         UpgradeContainerRegistry.register(ADVANCED_DIFFUSER_UPGRADE.getId(), ADVANCED_DIFFUSER_TYPE);
         UpgradeContainerRegistry.register(RECYCLER_UPGRADE.getId(), RECYCLER_TYPE);
@@ -94,6 +102,7 @@ public class ModItemsSophisticatedST {
         UpgradeContainerRegistry.register(DROP_UPGRADE.getId(), DROP_TYPE);
         UpgradeContainerRegistry.register(ADVANCED_DROP_UPGRADE.getId(), ADVANCED_DROP_TYPE);
         UpgradeContainerRegistry.register(IDENTIFICATION_UPGRADE.getId(), IDENTIFICATION_TYPE);
+        UpgradeContainerRegistry.register(OPENER_UPGRADE.getId(), OPENER_TYPE);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             UpgradeGuiManager.registerTab(DIFFUSER_TYPE, (DiffuserUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->
                     new DiffuserUpgradeTab.Basic(uc, p, s, Config.SERVER.diffuserUpgrade.slotsInRow.get()));
@@ -109,6 +118,8 @@ public class ModItemsSophisticatedST {
                     new DropUpgradeTab.Advanced(uc, p, s, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.advancedDropUpgradeConfig.slotsInRow.get()));
             UpgradeGuiManager.registerTab(IDENTIFICATION_TYPE, (IdentificationUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->
                     new IdentificationUpgradeTab.Advanced(uc, p, s, xyz.iwolfking.sophisticatedvaultupgrades.config.Config.SERVER.identificationUpgradeConfig.slotsInRow.get()));
+            UpgradeGuiManager.registerTab(OPENER_TYPE, (OpenerUpgradeContainer uc, Position p, StorageScreenBase<?> s) ->
+                    new OpenerUpgradeTab.Basic(uc, p, s, Config.SERVER.openerUpgradeConfig.slotsInRow.get()));
         });
     }
 }

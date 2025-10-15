@@ -26,6 +26,7 @@ public class SophisticatedVaultUpgrades {
     private static final Logger LOGGER = LogUtils.getLogger();
     public static final String MOD_ID = "sophisticatedvaultupgrades";
 
+
     public SophisticatedVaultUpgrades() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_SPEC);
         if(LoadingModList.get().getModFileById("sophisticatedstorage") != null) {
