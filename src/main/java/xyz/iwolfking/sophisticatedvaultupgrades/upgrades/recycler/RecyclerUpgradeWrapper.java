@@ -47,11 +47,7 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
 
     @Override
     public @NotNull ItemStack onBeforeInsert(@NotNull IItemHandlerSimpleInserter inventoryHandler, int slot, @NotNull ItemStack stack, boolean simulate) {
-        if(!(stack.getItem() instanceof RecyclableItem)) {
-            return stack;
-        }
-
-        if(!CustomRecyclerOutputs.CUSTOM_OUTPUTS.containsKey(stack.getItem().getRegistryName())) {
+        if(!(stack.getItem() instanceof RecyclableItem) && !CustomRecyclerOutputs.CUSTOM_OUTPUTS.containsKey(stack.getItem().getRegistryName())) {
             return stack;
         }
 
