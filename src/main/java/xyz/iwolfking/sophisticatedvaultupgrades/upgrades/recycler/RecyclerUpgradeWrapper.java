@@ -47,11 +47,7 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
 
     @Override
     public @NotNull ItemStack onBeforeInsert(@NotNull IItemHandlerSimpleInserter inventoryHandler, int slot, @NotNull ItemStack stack, boolean simulate) {
-        if(!(stack.getItem() instanceof RecyclableItem)) {
-            return stack;
-        }
-
-        if(!CustomRecyclerOutputs.CUSTOM_OUTPUTS.containsKey(stack.getItem().getRegistryName())) {
+        if(!(stack.getItem() instanceof RecyclableItem) && !CustomRecyclerOutputs.CUSTOM_OUTPUTS.containsKey(stack.getItem().getRegistryName())) {
             return stack;
         }
 
@@ -171,12 +167,7 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
     private boolean hasSlotSpace() {
         InventoryHandler handler = storageWrapper.getInventoryHandler();
         Predicate<ItemStack> hasItemPredicate = Predicate.not(Predicate.isEqual(ItemStack.EMPTY));
-        if(!handler.hasEmptySlots()) {
-            return false;
-        }
-        else {
-            return handler.getSlots() - InventoryHelper.getItemSlots(handler, hasItemPredicate).size() >= 3;
-        }
+        return handler.getSlots() - InventoryHelper.getItemSlots(handler, hasItemPredicate).size() >= 3;
     }
 
     public void setScrapUnidentified(boolean shouldScrapUnidentified) {
