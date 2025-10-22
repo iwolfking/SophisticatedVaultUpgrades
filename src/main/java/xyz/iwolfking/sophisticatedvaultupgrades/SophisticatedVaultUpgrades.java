@@ -23,7 +23,7 @@ import xyz.iwolfking.sophisticatedvaultupgrades.init.ModItemsSophisticatedST;
 public class SophisticatedVaultUpgrades {
 
     // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
     public static final String MOD_ID = "sophisticatedvaultupgrades";
 
 

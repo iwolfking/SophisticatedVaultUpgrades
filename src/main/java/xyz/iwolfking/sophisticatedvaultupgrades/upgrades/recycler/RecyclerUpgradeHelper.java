@@ -25,6 +25,7 @@ import net.minecraftforge.network.PacketDistributor;
 import net.p3pp3rf1y.sophisticatedcore.api.IStorageWrapper;
 import net.p3pp3rf1y.sophisticatedcore.util.InventoryHelper;
 import top.theillusivec4.curios.api.CuriosApi;
+import xyz.iwolfking.sophisticatedvaultupgrades.SophisticatedVaultUpgrades;
 import xyz.iwolfking.vhapi.api.data.api.CustomRecyclerOutputs;
 
 import java.util.List;
@@ -49,6 +50,7 @@ public class RecyclerUpgradeHelper {
             }
 
             if(output == null) {
+                SophisticatedVaultUpgrades.LOGGER.warn("A Recycler Upgrade output was null, this ideally shouldn't happen...");
                 return List.of();
             }
 
