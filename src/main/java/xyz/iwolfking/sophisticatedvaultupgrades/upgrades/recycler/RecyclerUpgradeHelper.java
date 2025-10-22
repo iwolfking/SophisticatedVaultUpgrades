@@ -39,12 +39,17 @@ public class RecyclerUpgradeHelper {
             ItemStack input = stack.copy();
             VaultRecyclerConfig.RecyclerOutput output;
             float resultPercentage = 1.0F;
+
             if(stack.getItem() instanceof RecyclableItem recyclableItem) {
                 output = recyclableItem.getOutput(stack);
                 resultPercentage = recyclableItem.getResultPercentage(stack);
             }
             else {
                 output = CustomRecyclerOutputs.CUSTOM_OUTPUTS.get(stack.getItem().getRegistryName());
+            }
+
+            if(output == null) {
+                return List.of();
             }
 
             float additionalChance = 0.0F;
