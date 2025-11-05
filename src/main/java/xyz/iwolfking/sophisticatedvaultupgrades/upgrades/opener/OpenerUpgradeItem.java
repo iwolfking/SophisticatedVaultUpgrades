@@ -14,6 +14,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.p3pp3rf1y.sophisticatedcore.upgrades.IUpgradeCountLimitConfig;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.UpgradeItemBase;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.UpgradeType;
 import org.jetbrains.annotations.NotNull;
@@ -28,8 +29,8 @@ public class OpenerUpgradeItem extends UpgradeItemBase<OpenerUpgradeWrapper> {
     public static final UpgradeType<OpenerUpgradeWrapper> TYPE = new UpgradeType<>(OpenerUpgradeWrapper::new);
 
 
-    public OpenerUpgradeItem(CreativeModeTab itemGroup, OpenerUpgradeConfig openerUpgradeConfig) {
-        super(itemGroup);
+    public OpenerUpgradeItem(CreativeModeTab itemGroup, OpenerUpgradeConfig openerUpgradeConfig, IUpgradeCountLimitConfig upgradeCountLimitConfig) {
+        super(itemGroup, upgradeCountLimitConfig);
         this.openerUpgradeConfig = openerUpgradeConfig;
     }
 
