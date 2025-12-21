@@ -69,6 +69,9 @@ public class RecyclerUpgradeHelper {
             if(stack.getItem() instanceof VaultGearItem) {
                 VaultGearData data = VaultGearData.read(input);
                 VaultGearRarity rarity = data.getRarity();
+                if (rarity == VaultGearRarity.UNIQUE) {
+                    return List.of(new ItemStack(ModItems.UNIQUE_SHARD), ItemStack.EMPTY, ItemStack.EMPTY);
+                }
                 boolean isCrafted = data.hasAttribute(ModGearAttributes.CRAFTED_BY) || data.getFirstValue(ModGearAttributes.CRAFTED_BY).isPresent();
                 boolean isLegendary = data.get(ModGearAttributes.IS_LEGENDARY, VaultGearAttributeTypeMerger.anyTrue());
                 additionalChance = ModConfigs.VAULT_RECYCLER.getAdditionalOutputRarityChance(rarity);
