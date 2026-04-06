@@ -270,15 +270,21 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
             return;
         }
 
-        Pair<Integer, Integer> shardDustPair = getDustAndShardPair(totalDust.get());
-        ItemStack existingDust = new ItemStack(ModItems.SOUL_DUST, totalDust.get());
-        ItemStack dustStack = new ItemStack(ModItems.SOUL_DUST, shardDustPair.getRight());
-        ItemStack shardStack = new ItemStack(ModItems.SOUL_SHARD, shardDustPair.getLeft());
 
 
-        //Check if the items will fit
-        if(canFitResultingDust(inventoryHandler, existingDust, dustStack, shardStack, true)) {
-            InventoryHelper.extractFromInventory(ModItems.SOUL_DUST, totalDust.get(), inventoryHandler, simulate);
+        while(true) {
+            ItemStack extracted = extractDustInChunks(inventoryHandler, totalDust.get(), simulate);
+            int extractedAmount = extracted.getCount();
+
+            if (extractedAmount < 9) {
+                return;
+            }
+
+            Pair<Integer, Integer> pair = getDustAndShardPair(extractedAmount);
+
+            ItemStack shardStack = new ItemStack(ModItems.SOUL_SHARD, pair.getLeft());
+            ItemStack dustStack = new ItemStack(ModItems.SOUL_DUST, pair.getRight());
+
             inventoryHandler.insertItem(shardStack, simulate);
             inventoryHandler.insertItem(dustStack, simulate);
         }
@@ -377,6 +383,32 @@ public class DiffuserUpgradeWrapper extends UpgradeWrapperBase<DiffuserUpgradeWr
 
     public ItemStack insertDiffusedDust(InventoryHandler inventoryHandler, ItemStack stackToDiffuse, boolean simulate) {
         return insertDiffusedDust(inventoryHandler, -1, stackToDiffuse, simulate, false);
+    }
+
+    private ItemStack extractDustInChunks(InventoryHandler handler, int amount, boolean simulate) {
+        ItemStack result = ItemStack.EMPTY;
+        int remaining = amount;
+
+        for (int slot = 0; slot < handler.getSlots() && remaining > 0; slot++) {
+            ItemStack stack = handler.getStackInSlot(slot);
+
+            if (!stack.is(ModItems.SOUL_DUST)) continue;
+
+            int toExtract = Math.min(remaining, stack.getMaxStackSize());
+
+            ItemStack extracted = handler.extractItem(slot, toExtract, simulate);
+            if (extracted.isEmpty()) continue;
+
+            if (result.isEmpty()) {
+                result = extracted.copy();
+            } else {
+                result.grow(extracted.getCount());
+            }
+
+            remaining -= extracted.getCount();
+        }
+
+        return result;
     }
 
     public static Pair<Integer, Integer> getDustAndShardPair(int totalValue) {
