@@ -90,7 +90,11 @@ public class IdentificationUpgradeWrapper extends UpgradeWrapperBase<Identificat
     }
 
     public boolean matchesFilter(ItemStack stack) {
-        return matchesFilter(stack, -1);
+        if(stack.getItem() instanceof IdentifiableItem gear && filterLogic.matchesFilter(stack) && !(stack.getItem() instanceof JewelPouchItem)) {
+            return gear.getState(stack).equals(VaultGearState.UNIDENTIFIED);
+        }
+
+        return false;
     }
 
     public boolean matchesFilter(ItemStack stack, int slot) {

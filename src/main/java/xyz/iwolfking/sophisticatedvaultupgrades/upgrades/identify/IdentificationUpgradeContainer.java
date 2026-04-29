@@ -23,6 +23,8 @@ public class IdentificationUpgradeContainer extends UpgradeContainerBase<Identif
         if (data.contains(DATA_SHOULD_IDENTIFY_IN_VAULT)) {
             setShouldWorkInVault(data.getBoolean(DATA_SHOULD_IDENTIFY_IN_VAULT));
         }
+        filterLogicContainer.handleMessage(data);
+
     }
 
     public void setShouldWorkInVault(boolean shouldWorkInVault) {
