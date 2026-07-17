@@ -45,7 +45,7 @@ public class SophisticatedVaultUpgrades {
     }
 
     public static ResourceLocation loc(String name) {
-        return new ResourceLocation(SophisticatedVaultUpgrades.MOD_ID, name);
+        return ResourceLocation.fromNamespaceAndPath(SophisticatedVaultUpgrades.MOD_ID, name);
     }
 
 }

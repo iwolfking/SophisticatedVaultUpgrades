@@ -13,6 +13,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+    id 'com.radimous.vh-addon-dev' version '0.3.6'
 }
 
 apply plugin: 'org.spongepowered.mixin'
@@ -142,33 +143,28 @@ repositories {
 }
 
 dependencies {
-    // Specify the version of Minecraft to use.
-    // Any artifact can be supplied so long as it has a "userdev" classifier artifact and is a compatible patcher artifact.
-    // The "userdev" classifier will be requested and setup by ForgeGradle.
-    // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
-    // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
+
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
    // implementation fg.deobf("curse.maven:sophisticatedcore-618298:4913626")
     implementation fg.deobf("curse.maven:sophisticated-storage-619320:5809745")
     implementation fg.deobf("curse.maven:sophisticated-backpacks-422301:5654080")
     implementation fg.deobf("curse.maven:sophisticated-core-618298:5296312")
-    implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:7862564")
+    implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:${vault_hunters_version}")
     implementation fg.deobf('curse.maven:curios-309927:4985315')
-    implementation fg.deobf("curse.maven:vault-hunters-api-1118899:6471174")
-    // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
-    // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
-    // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+    implementation fg.deobf("curse.maven:vault-hunters-api-1118899:8208136")
 
-    // Example mod dependency using a mod jar from ./libs with a flat dir repository
-    // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
-    // The group id is ignored when searching -- in this case, it is "blank"
-    // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
 
-    // For more info:
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    runtimeOnly fg.deobf("curse.maven:autoreglib-250363:3642382")
+    runtimeOnly fg.deobf("curse.maven:quark-243121:3840125")
+    runtimeOnly fg.deobf("curse.maven:geckolib-388172:4181370")
+    runtimeOnly fg.deobf("curse.maven:alexs-mobs-426558:3853078")
+    runtimeOnly fg.deobf("curse.maven:citadel-331936:3783096")
+    runtimeOnly fg.deobf("curse.maven:architects-palette-433862:4498424")
+
+    runtimeOnly fg.deobf("curse.maven:lazy-dfu-forge-460819:3544496")
+    runtimeOnly fg.deobf("curse.maven:ksyxis-537533:6174567")
+
+    implementation fg.deobf("curse.maven:jei-238222:4351311") // TODO: fix VHAPI MixinSealAnvilRecipe to make jei optional
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
