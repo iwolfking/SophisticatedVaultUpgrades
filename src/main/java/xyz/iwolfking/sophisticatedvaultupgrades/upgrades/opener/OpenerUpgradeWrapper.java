@@ -24,9 +24,6 @@ import net.p3pp3rf1y.sophisticatedcore.util.InventoryHelper;
 import net.p3pp3rf1y.sophisticatedcore.util.NBTHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.identify.IdentificationUpgradeItem;
-import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.recycler.RecyclerUpgradeHelper;
-import xyz.iwolfking.vhapi.api.data.api.CustomRecyclerOutputs;
 
 import java.util.HashSet;
 import java.util.List;

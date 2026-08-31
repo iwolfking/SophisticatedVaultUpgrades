@@ -1,19 +1,12 @@
 package xyz.iwolfking.sophisticatedvaultupgrades.upgrades.recycler;
 
-import iskallia.vault.block.entity.SpiritExtractorTileEntity;
-import iskallia.vault.config.VaultRecyclerConfig;
 import iskallia.vault.gear.VaultGearState;
 import iskallia.vault.gear.item.IdentifiableItem;
-import iskallia.vault.init.ModItems;
 import iskallia.vault.item.gear.RecyclableItem;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraftforge.items.IItemHandler;
 import net.p3pp3rf1y.sophisticatedcore.api.ISlotChangeResponseUpgrade;
 import net.p3pp3rf1y.sophisticatedcore.api.IStorageWrapper;
@@ -22,13 +15,9 @@ import net.p3pp3rf1y.sophisticatedcore.inventory.InventoryHandler;
 import net.p3pp3rf1y.sophisticatedcore.upgrades.*;
 import net.p3pp3rf1y.sophisticatedcore.util.InventoryHelper;
 import net.p3pp3rf1y.sophisticatedcore.util.NBTHelper;
-import net.p3pp3rf1y.sophisticatedcore.util.RecipeHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import xyz.iwolfking.sophisticatedvaultupgrades.upgrades.diffuser.DiffuserUpgradeHelper;
-import xyz.iwolfking.vhapi.api.data.api.CustomRecyclerOutputs;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,7 +36,7 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
 
     @Override
     public @NotNull ItemStack onBeforeInsert(@NotNull IItemHandlerSimpleInserter inventoryHandler, int slot, @NotNull ItemStack stack, boolean simulate) {
-        if(!(stack.getItem() instanceof RecyclableItem) && !CustomRecyclerOutputs.CUSTOM_OUTPUTS.containsKey(stack.getItem().getRegistryName())) {
+        if(!(stack.getItem() instanceof RecyclableItem) && !VHAPIIntegration.hasRecyclerOutput(stack.getItem().getRegistryName())) {
             return stack;
         }
 
@@ -107,7 +96,7 @@ public class RecyclerUpgradeWrapper extends UpgradeWrapperBase<RecyclerUpgradeWr
 
         ItemStack slotStack = inventoryHandler.getStackInSlot(slot);
 
-        if (filterLogic.matchesFilter(slotStack) && slotStack.getItem() instanceof RecyclableItem || CustomRecyclerOutputs.CUSTOM_OUTPUTS.containsKey(slotStack.getItem().getRegistryName())) {
+        if (filterLogic.matchesFilter(slotStack) && slotStack.getItem() instanceof RecyclableItem || VHAPIIntegration.hasRecyclerOutput(slotStack.getItem().getRegistryName())) {
             if(slotStack.getItem() instanceof RecyclableItem recyclableItem && !recyclableItem.isValidInput(slotStack)) {
                 return;
             }

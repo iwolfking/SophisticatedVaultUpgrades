@@ -151,7 +151,7 @@ dependencies {
     implementation fg.deobf("curse.maven:sophisticated-core-618298:5296312")
     implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:${vault_hunters_version}")
     implementation fg.deobf('curse.maven:curios-309927:4985315')
-    implementation fg.deobf("curse.maven:vault-hunters-api-1118899:8208136")
+    compileOnly fg.deobf("curse.maven:vault-hunters-api-1118899:8571300")
 
 
     runtimeOnly fg.deobf("curse.maven:autoreglib-250363:3642382")
@@ -164,7 +164,6 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:lazy-dfu-forge-460819:3544496")
     runtimeOnly fg.deobf("curse.maven:ksyxis-537533:6174567")
 
-    implementation fg.deobf("curse.maven:jei-238222:4351311") // TODO: fix VHAPI MixinSealAnvilRecipe to make jei optional
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
