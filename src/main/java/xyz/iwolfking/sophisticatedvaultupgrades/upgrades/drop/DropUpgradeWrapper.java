@@ -106,17 +106,21 @@ public class DropUpgradeWrapper extends UpgradeWrapperBase<DropUpgradeWrapper, D
         if(slotsToVoid.isEmpty()) {
             return;
         }
-
+        Set<Integer> nonEmpty = new HashSet<>();
         InventoryHandler storageInventory = storageWrapper.getInventoryHandler();
         for (int slot : slotsToVoid) {
             if(!stackMatchesFilter(storageInventory.getStackInSlot(slot))) {
                 continue;
             }
             DropUpgradeHelper.dropStackAtPosition(storageInventory, slot, world, pos, false);
+            if (!storageInventory.getStackInSlot(slot).isEmpty()) {
+                nonEmpty.add(slot); // will be processed in the next tick
+            }
 
         }
 
         slotsToVoid.clear();
+        slotsToVoid.addAll(nonEmpty);
     }
 
 
